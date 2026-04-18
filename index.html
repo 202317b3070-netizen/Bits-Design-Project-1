@@ -534,7 +534,22 @@
     </main>
 
     <!-- Scripting -->
-    <script>
+    <script type="module">
+ 
+import { LOCATIONS } from './locations.js';
+ 
+// Your existing code continues here
+console.log(LOCATIONS);
+ 
+function getPrice(city, locality) {
+  const cityData = LOCATIONS[city];
+  return cityData.basePrice * cityData.localities[locality];
+}
+ 
+console.log(getPrice("Bangalore", "Whitefield"));
+ 
+</script>
+ 
         // ---------------------------------------------------------
         // DATASET & CONSTANTS
         // ---------------------------------------------------------
