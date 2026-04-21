@@ -1,0 +1,31 @@
+{
+  "Chennai": {
+    "basePrice": 10500,
+    "localities": {
+      "Anna Nagar": 1.25,
+      "T Nagar": 1.40,
+      "Velachery": 0.95,
+      "Adyar": 1.20,
+      "OMR": 0.75,
+      "Porur": 0.65
+    }
+  },
+  "Coimbatore": {
+    "basePrice": 6500,
+    "localities": {
+      "RS Puram": 1.15,
+      "Race Course": 1.35,
+      "Saravanampatti": 0.85,
+      "Gandhipuram": 0.95,
+      "Peelamedu": 0.90
+    }
+  },
+  "Delhi": {
+    "basePrice": 14000,
+    "localities": {
+      "South Delhi": 1.45,
+      "Dwarka": 0.95,
+      "Rohini": 0.90
+    }
+  }
+}
