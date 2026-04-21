@@ -541,11 +541,19 @@
         let LOCATIONS = {}; // loaded from JSON
 
 async function loadLocations() {
-  const res = await fetch('./locations.json');
-  LOCATIONS = await res.json();
+  try {
+    const res = await fetch('/locations.json');  // ✅ PUT IT HERE
+    if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
 
-  if (!LOCATIONS || Object.keys(LOCATIONS).length === 0) {
-    throw new Error("locations.json is empty or invalid");
+    LOCATIONS = await res.json();
+
+    if (!LOCATIONS || Object.keys(LOCATIONS).length === 0) {
+      throw new Error("locations.json is empty or invalid");
+    }
+  } catch (err) {
+    console.error("Failed to load locations.json", err);
+    alert("Unable to load locations.json. Please run properly / check deployment.");
+    throw err; // stop the app from continuing
   }
 }
 
@@ -590,6 +598,23 @@ function populateCitiesDropdown(defaultCity) {
     setupEventListeners();
     updatePrediction();
     populateTable();
+
+      function populateCitiesDropdown(defaultCity) {
+  const citySelect = document.getElementById('city-select');
+  citySelect.innerHTML = '';
+
+  const cities = Object.keys(LOCATIONS).sort();
+  cities.forEach(city => {
+    const opt = document.createElement('option');
+    opt.value = city;
+    opt.textContent = city;
+    citySelect.appendChild(opt);
+  });
+
+  if (defaultCity && cities.includes(defaultCity)) {
+    citySelect.value = defaultCity;
+  }
+}
 
     setTimeout(() => {
       const loader = document.getElementById('loading-overlay');
