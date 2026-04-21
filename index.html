@@ -538,48 +538,8 @@
         // ---------------------------------------------------------
         // DATASET & CONSTANTS
         // ---------------------------------------------------------
-        const LOCATIONS = {
-            "Chennai": {
-                basePrice: 10500,
-                localities: {
-                    "Anna Nagar": 1.25,
-                    "T Nagar": 1.40,
-                    "Velachery": 0.95,
-                    "Adyar": 1.20,
-                    "OMR": 0.75,
-                    "Porur": 0.65
-                }
-            },
-            "Coimbatore": {
-                basePrice: 6500,
-                localities: {
-                    "RS Puram": 1.15,
-                    "Race Course": 1.35,
-                    "Saravanampatti": 0.85,
-                    "Gandhipuram": 0.95,
-                    "Peelamedu": 0.90
-                }
-            },
-            "Madurai": {
-                basePrice: 5200,
-                localities: {
-                    "Anna Nagar (MDU)": 1.10,
-                    "K Pudur": 0.85,
-                    "Sellur": 0.80,
-                    "Thirunagar": 0.90
-                }
-            },
-            "Salem": {
-                basePrice: 4200,
-                localities: {
-                    "Fairlands": 1.20,
-                    "Alagapuram": 1.05,
-                    "Shevapet": 0.85,
-                    "Meyyanur": 0.90
-                }
-            }
-        };
-
+        let LOCATIONS = {};   // loaded from JSON
+        
         // Weights
         const WEIGHTS = {
             bedroom: 0.12, // 12% increase per room
@@ -592,21 +552,45 @@
         // ---------------------------------------------------------
         // INITIALIZATION
         // ---------------------------------------------------------
-        window.onload = () => {
-            generateDataset();
-            populateLocalities();
-            initCharts();
-            setupEventListeners();
-            updatePrediction();
-            populateTable();
+        window.onload = async () => {
+  await loadLocations();     // ✅ load LOCATIONS first
+            async function loadLocations() {
+  try {
+    const res = await fetch('./locations.json');
+    LOCATIONS = await res.json();
 
-            // Simulate loader
-            setTimeout(() => {
-                const loader = document.getElementById('loading-overlay');
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 1000);
-            }, 1200);
-        };
+    // OPTIONAL: populate city dropdown dynamically
+    populateCitiesDropdown();
+
+  } catch (err) {
+    console.error("Failed to load locations.json", err);
+    alert("Unable to load locations file. Run using Live Server / local server.");
+  }
+}
+            function populateCitiesDropdown() {
+  const citySelect = document.getElementById('city-select');
+  citySelect.innerHTML = '';
+
+  Object.keys(LOCATIONS).sort().forEach(city => {
+    const opt = document.createElement('option');
+    opt.value = city;
+    opt.textContent = city;
+    citySelect.appendChild(opt);
+  });
+}
+  generateDataset();
+  populateLocalities();
+  initCharts();
+  setupEventListeners();
+  updatePrediction();
+  populateTable();
+
+  setTimeout(() => {
+    const loader = document.getElementById('loading-overlay');
+    loader.style.opacity = '0';
+    setTimeout(() => loader.style.display = 'none', 1000);
+  }, 1200);
+};
 
         // ---------------------------------------------------------
         // CORE LOGIC (ML / MATH)
