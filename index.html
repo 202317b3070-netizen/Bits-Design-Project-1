@@ -761,7 +761,7 @@ function populateCitiesDropdown(defaultCity) {
             
             samples.forEach(row => {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `
+                tr.innerHTML =
                     <td class="font-medium" style="color: var(--text-main)">${row.city}</td>
                     <td style="color: var(--text-dim)">${row.locality}</td>
                     <td style="color: var(--text-dim)">${row.bhk} BHK</td>
