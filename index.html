@@ -538,22 +538,19 @@
         // ---------------------------------------------------------
         // DATASET & CONSTANTS
         // ---------------------------------------------------------
-        let LOCATIONS = {}; // loaded from JSON
+        // ---------------------------------------------------------
+// DATASET & CONSTANTS
+// ---------------------------------------------------------
+let LOCATIONS = {}; // loaded from JSON
 
 async function loadLocations() {
-  try {
-    const res = await fetch('/locations.json');  // ✅ PUT IT HERE
-    if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+  const res = await fetch('/locations.json');
+  if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
 
-    LOCATIONS = await res.json();
+  LOCATIONS = await res.json();
 
-    if (!LOCATIONS || Object.keys(LOCATIONS).length === 0) {
-      throw new Error("locations.json is empty or invalid");
-    }
-  } catch (err) {
-    console.error("Failed to load locations.json", err);
-    alert("Unable to load locations.json. Please run properly / check deployment.");
-    throw err; // stop the app from continuing
+  if (!LOCATIONS || Object.keys(LOCATIONS).length === 0) {
+    throw new Error("locations.json is empty or invalid");
   }
 }
 
@@ -569,29 +566,29 @@ function populateCitiesDropdown(defaultCity) {
     citySelect.appendChild(opt);
   });
 
-  // optional default selection
   if (defaultCity && cities.includes(defaultCity)) {
     citySelect.value = defaultCity;
   }
 }
-        
-        // Weights
-        const WEIGHTS = {
-            bedroom: 0.12, // 12% increase per room
-            agePenalty: 0.015 // 1.5% decrease per year
-        };
 
-        let marketData = [];
-        let charts = {};
+// Weights
+const WEIGHTS = {
+  bedroom: 0.12,
+  agePenalty: 0.015
+};
 
-        // ---------------------------------------------------------
-        // INITIALIZATION
-        // ---------------------------------------------------------
-        window.onload = async () => {
+let marketData = [];
+let charts = {};
+
+// ---------------------------------------------------------
+// INITIALIZATION
+// ---------------------------------------------------------
+window.onload = async () => {
   try {
-    await loadLocations();                 // 1) load JSON first
-    populateCitiesDropdown("Chennai");     // 2) fill city dropdown
-    populateLocalities();                  // 3) fill locality dropdown
+    await loadLocations();
+
+    populateCitiesDropdown("Chennai");
+    populateLocalities();
 
     generateDataset();
     initCharts();
@@ -607,7 +604,7 @@ function populateCitiesDropdown(defaultCity) {
 
   } catch (err) {
     console.error(err);
-    alert("Unable to load locations.json. Run using Live Server / local server.");
+    alert("Unable to load locations.json. Check that it is deployed correctly.");
   }
 };
         // ---------------------------------------------------------
