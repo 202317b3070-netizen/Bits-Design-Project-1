@@ -599,23 +599,6 @@ function populateCitiesDropdown(defaultCity) {
     updatePrediction();
     populateTable();
 
-      function populateCitiesDropdown(defaultCity) {
-  const citySelect = document.getElementById('city-select');
-  citySelect.innerHTML = '';
-
-  const cities = Object.keys(LOCATIONS).sort();
-  cities.forEach(city => {
-    const opt = document.createElement('option');
-    opt.value = city;
-    opt.textContent = city;
-    citySelect.appendChild(opt);
-  });
-
-  if (defaultCity && cities.includes(defaultCity)) {
-    citySelect.value = defaultCity;
-  }
-}
-
     setTimeout(() => {
       const loader = document.getElementById('loading-overlay');
       loader.style.opacity = '0';
