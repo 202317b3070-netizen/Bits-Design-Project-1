@@ -538,48 +538,7 @@
         // ---------------------------------------------------------
         // DATASET & CONSTANTS
         // ---------------------------------------------------------
-        const LOCATIONS = {
-            "Chennai": {
-                basePrice: 10500,
-                localities: {
-                    "Anna Nagar": 1.25,
-                    "T Nagar": 1.40,
-                    "Velachery": 0.95,
-                    "Adyar": 1.20,
-                    "OMR": 0.75,
-                    "Porur": 0.65
-                }
-            },
-            "Coimbatore": {
-                basePrice: 6500,
-                localities: {
-                    "RS Puram": 1.15,
-                    "Race Course": 1.35,
-                    "Saravanampatti": 0.85,
-                    "Gandhipuram": 0.95,
-                    "Peelamedu": 0.90
-                }
-            },
-            "Madurai": {
-                basePrice: 5200,
-                localities: {
-                    "Anna Nagar (MDU)": 1.10,
-                    "K Pudur": 0.85,
-                    "Sellur": 0.80,
-                    "Thirunagar": 0.90
-                }
-            },
-            "Salem": {
-                basePrice: 4200,
-                localities: {
-                    "Fairlands": 1.20,
-                    "Alagapuram": 1.05,
-                    "Shevapet": 0.85,
-                    "Meyyanur": 0.90
-                }
-            }
-        };
-
+       let LOCATIONS = {};   // loaded from JSON
         // Weights
         const WEIGHTS = {
             bedroom: 0.12, // 12% increase per room
