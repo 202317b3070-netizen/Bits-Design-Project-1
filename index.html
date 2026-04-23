@@ -551,21 +551,21 @@
         // ---------------------------------------------------------
         // INITIALIZATION
         // ---------------------------------------------------------
-        window.onload = () => {
-            generateDataset();
-            populateLocalities();
-            initCharts();
-            setupEventListeners();
-            updatePrediction();
-            populateTable();
+       window.onload = async () => {
+  await loadLocations();     // ✅ load LOCATIONS first
+  generateDataset();
+  populateLocalities();
+  initCharts();
+  setupEventListeners();
+  updatePrediction();
+  populateTable();
 
-            // Simulate loader
-            setTimeout(() => {
-                const loader = document.getElementById('loading-overlay');
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 1000);
-            }, 1200);
-        };
+  setTimeout(() => {
+    const loader = document.getElementById('loading-overlay');
+    loader.style.opacity = '0';
+    setTimeout(() => loader.style.display = 'none', 1000);
+  }, 1200);
+};
 
         // ---------------------------------------------------------
         // CORE LOGIC (ML / MATH)
