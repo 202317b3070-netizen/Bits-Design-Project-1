@@ -287,5 +287,296 @@
       "Payyambalam": 1.00,
       "Chovva": 0.90
     }
+  },
+  "Delhi": {
+    "basePrice": 14000,
+    "localities": {
+      "South Delhi": 1.45,
+      "Connaught Place": 1.55,
+      "Dwarka": 0.95,
+      "Rohini": 0.90,
+      "Saket": 1.30,
+      "Janakpuri": 1.00,
+      "Mayur Vihar": 1.05,
+      "Karol Bagh": 1.10
+    }
+  },
+  "Noida": {
+    "basePrice": 12000,
+    "localities": {
+      "Sector 18": 1.25,
+      "Sector 62": 1.05,
+      "Sector 137": 0.90,
+      "Sector 50": 1.05,
+      "Sector 76": 0.95,
+      "Greater Noida": 0.85,
+      "Expressway": 0.92
+    }
+  },
+  "Gurugram": {
+    "basePrice": 13500,
+    "localities": {
+      "Golf Course Road": 1.55,
+      "DLF Phase 1-5": 1.40,
+      "Sohna Road": 1.05,
+      "Sector 57": 1.10,
+      "Udyog Vihar": 1.00,
+      "New Gurgaon": 0.92
+    }
+  },
+  "Faridabad": {
+    "basePrice": 9000,
+    "localities": {
+      "Sector 15": 1.10,
+      "Sector 21": 1.05,
+      "NIT": 0.95,
+      "Ballabhgarh": 0.85,
+      "Surajkund Road": 1.15
+    }
+  },
+  "Ghaziabad": {
+    "basePrice": 9500,
+    "localities": {
+      "Indirapuram": 1.15,
+      "Vaishali": 1.05,
+      "Raj Nagar Extension": 0.90,
+      "Kaushambi": 0.98,
+      "Crossings Republik": 0.88
+    }
+  },
+
+  "Chandigarh": {
+    "basePrice": 11000,
+    "localities": {
+      "Sector 17": 1.35,
+      "Sector 22": 1.15,
+      "Sector 35": 1.25,
+      "Manimajra": 0.90,
+      "IT Park": 1.10
+    }
+  },
+  "Mohali": {
+    "basePrice": 9800,
+    "localities": {
+      "Sector 70-71": 1.15,
+      "Aerocity": 1.20,
+      "Kharar": 0.85,
+      "Phase 7": 1.05,
+      "Zirakpur": 0.90
+    }
+  },
+  "Amritsar": {
+    "basePrice": 7500,
+    "localities": {
+      "Ranjit Avenue": 1.20,
+      "Majitha Road": 0.95,
+      "Lawrence Road": 1.10,
+      "GT Road": 0.90
+    }
+  },
+  "Ludhiana": {
+    "basePrice": 7800,
+    "localities": {
+      "Sarabha Nagar": 1.25,
+      "Model Town": 1.10,
+      "Pakhowal Road": 1.05,
+      "Dugri": 0.90,
+      "Ferozepur Road": 0.95
+    }
+  },
+  "Jalandhar": {
+    "basePrice": 7200,
+    "localities": {
+      "Civil Lines": 1.15,
+      "Model Town": 1.05,
+      "Cantt Area": 1.10,
+      "Nakodar Road": 0.90
+    }
+  },
+
+  "Jaipur": {
+    "basePrice": 8200,
+    "localities": {
+      "C-Scheme": 1.30,
+      "Malviya Nagar": 1.10,
+      "Vaishali Nagar": 1.15,
+      "Mansarovar": 0.95,
+      "Jagatpura": 0.90,
+      "Tonk Road": 1.05
+    }
+  },
+  "Udaipur": {
+    "basePrice": 6800,
+    "localities": {
+      "Fatehpura": 1.10,
+      "Hiran Magri": 0.95,
+      "Bhopalpura": 1.05,
+      "Pratap Nagar": 0.90
+    }
+  },
+  "Jodhpur": {
+    "basePrice": 6200,
+    "localities": {
+      "Ratanada": 1.10,
+      "Pal Road": 0.95,
+      "Sardarpura": 1.15,
+      "Basni": 0.85
+    }
+  },
+  "Kota": {
+    "basePrice": 5600,
+    "localities": {
+      "Talwandi": 1.10,
+      "Mahaveer Nagar": 1.05,
+      "Kunhadi": 0.95,
+      "Dadabari": 1.00
+    }
+  },
+
+  "Lucknow": {
+    "basePrice": 7600,
+    "localities": {
+      "Gomti Nagar": 1.20,
+      "Hazratganj": 1.30,
+      "Indira Nagar": 1.05,
+      "Aliganj": 0.95,
+      "Alambagh": 0.90,
+      "Sushant Golf City": 1.10
+    }
+  },
+  "Kanpur": {
+    "basePrice": 7000,
+    "localities": {
+      "Swaroop Nagar": 1.15,
+      "Civil Lines": 1.20,
+      "Kalyanpur": 0.95,
+      "Kidwai Nagar": 0.90,
+      "Shastri Nagar": 0.92
+    }
+  },
+  "Varanasi": {
+    "basePrice": 6500,
+    "localities": {
+      "Sigra": 1.10,
+      "Lanka": 1.05,
+      "Bhelupur": 1.15,
+      "Mahmoorganj": 1.12,
+      "Sarnath": 0.90
+    }
+  },
+  "Prayagraj": {
+    "basePrice": 6000,
+    "localities": {
+      "Civil Lines": 1.20,
+      "Naini": 0.90,
+      "Jhunsi": 0.88,
+      "Kareli": 0.95,
+      "Allahpur": 1.00
+    }
+  },
+  "Agra": {
+    "basePrice": 6200,
+    "localities": {
+      "Sikandra": 1.00,
+      "Tajganj": 1.15,
+      "Kamla Nagar": 1.05,
+      "Dayal Bagh": 1.10,
+      "Fatehabad Road": 1.12
+    }
+  },
+  "Meerut": {
+    "basePrice": 6400,
+    "localities": {
+      "Civil Lines": 1.10,
+      "Pallavpuram": 0.95,
+      "Shastri Nagar": 1.00,
+      "Modipuram": 0.90
+    }
+  },
+
+  "Dehradun": {
+    "basePrice": 8200,
+    "localities": {
+      "Rajpur Road": 1.20,
+      "Mussoorie Road": 1.10,
+      "Clement Town": 0.90,
+      "Sahastradhara Road": 1.05,
+      "ISBT Area": 0.95
+    }
+  },
+  "Haridwar": {
+    "basePrice": 6200,
+    "localities": {
+      "Sidcul": 0.95,
+      "Jwalapur": 0.90,
+      "Har Ki Pauri": 1.10,
+      "Ranipur": 0.92
+    }
+  },
+  "Rishikesh": {
+    "basePrice": 6800,
+    "localities": {
+      "Tapovan": 1.20,
+      "Laxman Jhula": 1.10,
+      "AIIMS Area": 0.95,
+      "Shyampur": 0.90
+    }
+  },
+
+  "Shimla": {
+    "basePrice": 9000,
+    "localities": {
+      "Mall Road": 1.35,
+      "Sanjauli": 1.05,
+      "Kasumpti": 1.00,
+      "New Shimla": 0.95
+    }
+  },
+  "Manali": {
+    "basePrice": 8500,
+    "localities": {
+      "Old Manali": 1.25,
+      "Vashisht": 1.15,
+      "Prini": 0.95,
+      "Aleo": 0.90
+    }
+  },
+  "Dharamshala": {
+    "basePrice": 7800,
+    "localities": {
+      "McLeod Ganj": 1.30,
+      "Sidhbari": 1.05,
+      "Kotwali Bazaar": 1.00,
+      "Naddi": 0.95
+    }
+  },
+
+  "Jammu": {
+    "basePrice": 6800,
+    "localities": {
+      "Gandhi Nagar": 1.10,
+      "Trikuta Nagar": 1.05,
+      "Channi Himmat": 1.00,
+      "Bahu Plaza": 0.95
+    }
+  },
+  "Srinagar": {
+    "basePrice": 7200,
+    "localities": {
+      "Lal Chowk": 1.20,
+      "Rajbagh": 1.10,
+      "Hazratbal": 1.00,
+      "Bemina": 0.90
+    }
+  },
+
+  "Leh": {
+    "basePrice": 8000,
+    "localities": {
+      "Main Market": 1.25,
+      "Choglamsar": 0.90,
+      "Skara": 1.05,
+      "Shey": 0.95
+    }
   }
 }
