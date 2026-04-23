@@ -7,7 +7,11 @@
       "Velachery": 0.95,
       "Adyar": 1.20,
       "OMR": 0.75,
-      "Porur": 0.65
+      "Porur": 0.65,
+      "Nungambakkam": 1.30,
+      "Mylapore": 1.22,
+      "Tambaram": 0.70,
+      "Sholinganallur": 0.78
     }
   },
   "Coimbatore": {
@@ -17,15 +21,271 @@
       "Race Course": 1.35,
       "Saravanampatti": 0.85,
       "Gandhipuram": 0.95,
-      "Peelamedu": 0.90
+      "Peelamedu": 0.90,
+      "Singanallur": 0.88,
+      "Saibaba Colony": 1.10
     }
   },
-  "Delhi": {
-    "basePrice": 14000,
+  "Madurai": {
+    "basePrice": 5200,
     "localities": {
-      "South Delhi": 1.45,
-      "Dwarka": 0.95,
-      "Rohini": 0.90
+      "Anna Nagar (MDU)": 1.10,
+      "K Pudur": 0.85,
+      "Sellur": 0.80,
+      "Thirunagar": 0.90,
+      "KK Nagar": 0.95
+    }
+  },
+  "Salem": {
+    "basePrice": 4200,
+    "localities": {
+      "Fairlands": 1.20,
+      "Alagapuram": 1.05,
+      "Shevapet": 0.85,
+      "Meyyanur": 0.90,
+      "Hasthampatti": 0.95
+    }
+  },
+  "Tiruchirappalli": {
+    "basePrice": 4700,
+    "localities": {
+      "Srirangam": 1.10,
+      "Thillai Nagar": 1.15,
+      "Woraiyur": 1.05,
+      "K K Nagar": 0.95,
+      "Cantonment": 1.08
+    }
+  },
+  "Erode": {
+    "basePrice": 3900,
+    "localities": {
+      "Perundurai": 0.85,
+      "Surampatti": 0.95,
+      "Teachers Colony": 1.05,
+      "Brough Road": 1.10
+    }
+  },
+  "Tirunelveli": {
+    "basePrice": 3600,
+    "localities": {
+      "Palayamkottai": 1.10,
+      "Vannarpettai": 0.95,
+      "Melapalayam": 0.85,
+      "Tirunelveli Town": 0.90
+    }
+  },
+  "Vellore": {
+    "basePrice": 4100,
+    "localities": {
+      "Katpadi": 1.05,
+      "Bagayam": 0.95,
+      "Gandhi Nagar": 1.10,
+      "Thorapadi": 0.85
+    }
+  },
+  "Thanjavur": {
+    "basePrice": 3500,
+    "localities": {
+      "Kumbakonam Road": 0.90,
+      "New Bus Stand Area": 0.95,
+      "Vallam": 0.85,
+      "Medical College Road": 1.05
+    }
+  },
+  "Puducherry": {
+    "basePrice": 6500,
+    "localities": {
+      "White Town": 1.35,
+      "Muthialpet": 0.95,
+      "Auroville": 1.20,
+      "Lawspet": 1.05,
+      "Reddiarpalayam": 0.90
+    }
+  },
+
+  "Bengaluru": {
+    "basePrice": 12500,
+    "localities": {
+      "Indiranagar": 1.35,
+      "Koramangala": 1.30,
+      "Whitefield": 0.95,
+      "HSR Layout": 1.15,
+      "Jayanagar": 1.10,
+      "Electronic City": 0.80,
+      "Malleshwaram": 1.20,
+      "Hebbal": 0.90,
+      "Bellandur": 1.00,
+      "Marathahalli": 0.92
+    }
+  },
+  "Mysuru": {
+    "basePrice": 6200,
+    "localities": {
+      "Vijayanagar": 1.05,
+      "Saraswathipuram": 1.10,
+      "Jayalakshmipuram": 1.15,
+      "Hebbal": 0.90,
+      "Gokulam": 1.08
+    }
+  },
+  "Mangaluru": {
+    "basePrice": 7000,
+    "localities": {
+      "Kadri": 1.10,
+      "Bejai": 1.05,
+      "Hampankatta": 1.15,
+      "Surathkal": 0.85,
+      "Kankanady": 0.95
+    }
+  },
+  "Hubballi": {
+    "basePrice": 5200,
+    "localities": {
+      "Vidyanagar": 1.05,
+      "Gokul Road": 0.95,
+      "Keshwapur": 0.85,
+      "Unkal": 0.90
+    }
+  },
+  "Belagavi": {
+    "basePrice": 4800,
+    "localities": {
+      "Tilakwadi": 1.10,
+      "Shahapur": 0.90,
+      "Angol": 0.95,
+      "Hindwadi": 1.05
+    }
+  },
+
+  "Hyderabad": {
+    "basePrice": 11000,
+    "localities": {
+      "Hitech City": 1.30,
+      "Gachibowli": 1.25,
+      "Banjara Hills": 1.45,
+      "Jubilee Hills": 1.50,
+      "Kondapur": 1.05,
+      "Madhapur": 1.20,
+      "Kukatpally": 0.95,
+      "Secunderabad": 1.00,
+      "Manikonda": 1.10,
+      "Uppal": 0.88
+    }
+  },
+  "Warangal": {
+    "basePrice": 5200,
+    "localities": {
+      "Hanamkonda": 1.10,
+      "Kazipet": 0.95,
+      "Naim Nagar": 0.90,
+      "MGm Hospital Area": 1.00
+    }
+  },
+  "Nizamabad": {
+    "basePrice": 4500,
+    "localities": {
+      "Vinayak Nagar": 1.05,
+      "Yellama Gutta": 0.90,
+      "Subhash Nagar": 0.95,
+      "Bodhan Road": 0.92
+    }
+  },
+
+  "Visakhapatnam": {
+    "basePrice": 8000,
+    "localities": {
+      "MVP Colony": 1.20,
+      "Dwaraka Nagar": 1.10,
+      "Gajuwaka": 0.90,
+      "Madhurawada": 0.95,
+      "Seethammadhara": 1.15,
+      "Rushikonda": 1.05
+    }
+  },
+  "Vijayawada": {
+    "basePrice": 7200,
+    "localities": {
+      "Benz Circle": 1.20,
+      "Gandhinagar": 1.00,
+      "Kanuru": 0.95,
+      "Poranki": 0.90,
+      "Auto Nagar": 0.85
+    }
+  },
+  "Guntur": {
+    "basePrice": 6500,
+    "localities": {
+      "Brodipet": 1.10,
+      "Lakshmipuram": 1.05,
+      "Pattabhipuram": 0.95,
+      "Amaravathi Road": 0.90
+    }
+  },
+  "Tirupati": {
+    "basePrice": 6000,
+    "localities": {
+      "MR Palli": 1.05,
+      "Leela Mahal": 1.10,
+      "Renigunta": 0.85,
+      "Korlagunta": 0.95
+    }
+  },
+  "Kakinada": {
+    "basePrice": 5400,
+    "localities": {
+      "Sarpavaram": 0.90,
+      "Ramanayyapeta": 0.95,
+      "Bhanugudi": 1.05,
+      "Jagannaickpur": 1.00
+    }
+  },
+
+  "Kochi": {
+    "basePrice": 8800,
+    "localities": {
+      "Kakkanad": 1.05,
+      "Edappally": 1.10,
+      "Panampilly Nagar": 1.25,
+      "Fort Kochi": 1.15,
+      "Vyttila": 1.05,
+      "Palarivattom": 1.00
+    }
+  },
+  "Thiruvananthapuram": {
+    "basePrice": 7600,
+    "localities": {
+      "Kowdiar": 1.20,
+      "Pattom": 1.05,
+      "Technopark": 0.95,
+      "Kazhakkoottam": 0.90,
+      "Palayam": 1.10
+    }
+  },
+  "Kozhikode": {
+    "basePrice": 6900,
+    "localities": {
+      "Nadakkavu": 1.10,
+      "Kovoor": 0.95,
+      "Mavoor Road": 1.05,
+      "Kallai": 0.90
+    }
+  },
+  "Thrissur": {
+    "basePrice": 6200,
+    "localities": {
+      "Punkunnam": 1.05,
+      "Ayyanthole": 1.10,
+      "Mannuthy": 0.90,
+      "Guruvayur Road": 0.95
+    }
+  },
+  "Kannur": {
+    "basePrice": 5600,
+    "localities": {
+      "Thana": 1.05,
+      "Talap": 1.10,
+      "Payyambalam": 1.00,
+      "Chovva": 0.90
     }
   }
 }
