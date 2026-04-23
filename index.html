@@ -553,6 +553,19 @@
         // ---------------------------------------------------------
        window.onload = async () => {
   await loadLocations();     // ✅ load LOCATIONS first
+           async function loadLocations() {
+  try {
+    const res = await fetch('./locations.json');
+    LOCATIONS = await res.json();
+
+    // OPTIONAL: populate city dropdown dynamically
+    populateCitiesDropdown();
+
+  } catch (err) {
+    console.error("Failed to load locations.json", err);
+    alert("Unable to load locations file. Run using Live Server / local server.");
+  }
+}
   generateDataset();
   populateLocalities();
   initCharts();
@@ -566,6 +579,17 @@
     setTimeout(() => loader.style.display = 'none', 1000);
   }, 1200);
 };
+        function populateCitiesDropdown() {
+  const citySelect = document.getElementById('city-select');
+  citySelect.innerHTML = '';
+
+  Object.keys(LOCATIONS).sort().forEach(city => {
+    const opt = document.createElement('option');
+    opt.value = city;
+    opt.textContent = city;
+    citySelect.appendChild(opt);
+  });
+}
 
         // ---------------------------------------------------------
         // CORE LOGIC (ML / MATH)
