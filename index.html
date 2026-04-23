@@ -538,75 +538,76 @@
         // ---------------------------------------------------------
         // DATASET & CONSTANTS
         // ---------------------------------------------------------
+        const LOCATIONS = {
+            "Chennai": {
+                basePrice: 10500,
+                localities: {
+                    "Anna Nagar": 1.25,
+                    "T Nagar": 1.40,
+                    "Velachery": 0.95,
+                    "Adyar": 1.20,
+                    "OMR": 0.75,
+                    "Porur": 0.65
+                }
+            },
+            "Coimbatore": {
+                basePrice: 6500,
+                localities: {
+                    "RS Puram": 1.15,
+                    "Race Course": 1.35,
+                    "Saravanampatti": 0.85,
+                    "Gandhipuram": 0.95,
+                    "Peelamedu": 0.90
+                }
+            },
+            "Madurai": {
+                basePrice: 5200,
+                localities: {
+                    "Anna Nagar (MDU)": 1.10,
+                    "K Pudur": 0.85,
+                    "Sellur": 0.80,
+                    "Thirunagar": 0.90
+                }
+            },
+            "Salem": {
+                basePrice: 4200,
+                localities: {
+                    "Fairlands": 1.20,
+                    "Alagapuram": 1.05,
+                    "Shevapet": 0.85,
+                    "Meyyanur": 0.90
+                }
+            }
+        };
+
+        // Weights
+        const WEIGHTS = {
+            bedroom: 0.12, // 12% increase per room
+            agePenalty: 0.015 // 1.5% decrease per year
+        };
+
+        let marketData = [];
+        let charts = {};
+
         // ---------------------------------------------------------
-// DATASET & CONSTANTS
-// ---------------------------------------------------------
-let LOCATIONS = {}; // loaded from JSON
+        // INITIALIZATION
+        // ---------------------------------------------------------
+        window.onload = () => {
+            generateDataset();
+            populateLocalities();
+            initCharts();
+            setupEventListeners();
+            updatePrediction();
+            populateTable();
 
-async function loadLocations() {
-  const res = await fetch('/locations.json');
-  if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+            // Simulate loader
+            setTimeout(() => {
+                const loader = document.getElementById('loading-overlay');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 1000);
+            }, 1200);
+        };
 
-  LOCATIONS = await res.json();
-
-  if (!LOCATIONS || Object.keys(LOCATIONS).length === 0) {
-    throw new Error("locations.json is empty or invalid");
-  }
-}
-
-function populateCitiesDropdown(defaultCity) {
-  const citySelect = document.getElementById('city-select');
-  citySelect.innerHTML = '';
-
-  const cities = Object.keys(LOCATIONS).sort();
-  cities.forEach(city => {
-    const opt = document.createElement('option');
-    opt.value = city;
-    opt.textContent = city;
-    citySelect.appendChild(opt);
-  });
-
-  if (defaultCity && cities.includes(defaultCity)) {
-    citySelect.value = defaultCity;
-  }
-}
-
-// Weights
-const WEIGHTS = {
-  bedroom: 0.12,
-  agePenalty: 0.015
-};
-
-let marketData = [];
-let charts = {};
-
-// ---------------------------------------------------------
-// INITIALIZATION
-// ---------------------------------------------------------
-window.onload = async () => {
-  try {
-    await loadLocations();
-
-    populateCitiesDropdown("Chennai");
-    populateLocalities();
-
-    generateDataset();
-    initCharts();
-    setupEventListeners();
-    updatePrediction();
-    populateTable();
-
-    setTimeout(() => {
-      const loader = document.getElementById('loading-overlay');
-      loader.style.opacity = '0';
-      setTimeout(() => loader.style.display = 'none', 1000);
-    }, 1200);
-
-  } catch (err) {
-    console.error(err);
-    alert("Unable to load locations.json. Check that it is deployed correctly.");
-  }
-};
         // ---------------------------------------------------------
         // CORE LOGIC (ML / MATH)
         // ---------------------------------------------------------
@@ -758,13 +759,13 @@ window.onload = async () => {
             
             samples.forEach(row => {
                 const tr = document.createElement('tr');
-                tr.innerHTML =
+                tr.innerHTML = `
                     <td class="font-medium" style="color: var(--text-main)">${row.city}</td>
                     <td style="color: var(--text-dim)">${row.locality}</td>
                     <td style="color: var(--text-dim)">${row.bhk} BHK</td>
                     <td style="color: var(--text-dim)">${row.sqft} ft²</td>
                     <td class="font-bold" style="color: var(--accent)">₹${formatCurrency(row.price)}</td>
-                ;
+                `;
                 tbody.appendChild(tr);
             });
         }
