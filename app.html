@@ -869,6 +869,10 @@
             charts.scatter.data.datasets[0].data = scatterPoints;
             charts.scatter.update();
         }
+        (function requireLogin(){
+  const ok = localStorage.getItem("ire_logged_in") === "true";
+  if (!ok) window.location.href = "login.html";
+})();
     </script>
 </body>
 </html>
