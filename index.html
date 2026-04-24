@@ -1,9 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-gb" data-color-scheme="light" dir="ltr" translate="no" style="color-scheme: light;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>India Real Estate Analyzer | BITS Pilani WILP</title>
+    <style data-critical="layout">
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+  }
+
+  #root {
+    display: flex;
+    min-height: 100%;
+  }
+
+  /* Mobile viewport correctness (safe progressive enhancement) */
+  @supports (height: 100dvh) {
+    #root {
+      min-height: 100dvh;
+    }
+  }
+
+  body {
+    color-scheme: light;
+  }
+
+  body.shouldHideBody {
+    visibility: hidden;
+  }
+
+  /* handle error root boundary */
+  .root-error-boundary {
+    display: contents;
+  }
+</style>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,21 +82,6 @@
                 overflow: hidden;
             }
         }
-        <body class="">
-  <!-- Theme Toggle (Top Right Fixed) -->
-  <button id="theme-toggle" class="theme-toggle-fixed" type="button" aria-label="Toggle theme">
-    ☀️
-  </button>
-
-  <!-- existing loading overlay -->
-  <div id="loading-overlay" class="fixed inset-0 z-50 ...">...</div>
-
-  <!-- Sidebar / Inputs -->
-  <aside class="sidebar-container"> ... </aside>
-
-  <!-- Main Content Area -->
-  <main class="main-content"> ... </main>
-</body>
 
         /* Sidebar Styles */
         .sidebar-container {
@@ -408,21 +424,11 @@
     </div>
 
     <!-- Sidebar / Inputs -->
-    <!-- Sidebar / Inputs -->
-<aside class="sidebar-container">
-
-  <!-- Theme toggle button (top-right inside sidebar) -->
-  <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="Toggle theme">
-    🌙
-  </button>
-
-  <div class="logo">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-      <polyline points="9 22 9 12 15 12 15 22"></polyline>
-    </svg>
-    India Real Estate Analyzer
-  </div>
+    <aside class="sidebar-container">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            India Real Estate Analyzer
+        </div>
 
         <div class="input-group">
             <label>Target City</label>
