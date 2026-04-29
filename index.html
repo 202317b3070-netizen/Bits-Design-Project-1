@@ -629,6 +629,13 @@ if (loginInfo && userEmail) {
     ? `Signed in as <b>${userEmail}</b> — Last login: <b>${formatDate(previous)}</b>`
     : `Signed in as <b>${userEmail}</b> — This is your <b>first login</b>.`;
 }
+        // ✅ LOGOUT FUNCTION
+function logout() {
+  localStorage.removeItem("loggedInUser");
+  localStorage.removeItem("previousLoginForSession");
+  window.location.href = "login.html";
+}"
+    </script>
         // ---------------------------------------------------------
         // DATASET & CONSTANTS
         // ---------------------------------------------------------
