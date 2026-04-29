@@ -517,6 +517,7 @@
             <div class="header-title">
                 <h2>Market Intelligence</h2>
                 <p>India Real Estate corridors simulation.</p>
+                <p id="loginInfo" class="text-xs text-slate-400 mt-2"></p>
             </div>
             <div class="flex items-center gap-4">
                 <div class="hidden md:block text-right">
@@ -608,6 +609,19 @@
   if (!user) {
     window.location.href = "login.html";
   }
+        function formatDate(iso) {
+  return new Date(iso).toLocaleString();
+}
+
+const userEmail = localStorage.getItem("loggedInUser");
+const previous = localStorage.getItem("previousLoginForSession");
+const loginInfo = document.getElementById("loginInfo");
+
+if (loginInfo && userEmail) {
+  loginInfo.innerHTML = previous
+    ? `Signed in as <b>${userEmail}</b> — Last login: <b>${formatDate(previous)}</b>`
+    : `Signed in as <b>${userEmail}</b> — This is your <b>first login</b>.`;
+}
         // ---------------------------------------------------------
         // DATASET & CONSTANTS
         // ---------------------------------------------------------
