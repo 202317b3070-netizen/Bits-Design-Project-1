@@ -602,6 +602,12 @@
 
     <!-- Scripting -->
     <script>
+        
+// --- LOGIN GUARD ---
+  const user = localStorage.getItem("loggedInUser");
+  if (!user) {
+    window.location.href = "login.html";
+  }
         // ---------------------------------------------------------
         // DATASET & CONSTANTS
         // ---------------------------------------------------------
