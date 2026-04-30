@@ -320,9 +320,16 @@
       if(!email || !pass) return showError("Please enter email and password.");
 
       // demo validation
-      if (email !== DEMO_USER.email || pass !== DEMO_USER.password){
-        return showError("Invalid credentials. Click 'Use demo' or try test@example.com / 1234.");
-      }
+      // Basic email validation only
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!emailPattern.test(email)) {
+  return showError("Please enter a valid email address.");
+}
+
+// Optional: password rule (not validated against database)
+if (pass.length < 3) {
+  return showError("Password should be at least 3 characters.");
+}
 
       // Remember email (optional)
       if (remember) localStorage.setItem("rememberedEmail", email);
