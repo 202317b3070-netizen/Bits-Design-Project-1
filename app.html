@@ -610,32 +610,32 @@
 
     <!-- Scripting -->
     <script>
-        
 // --- LOGIN GUARD ---
   const user = localStorage.getItem("loggedInUser");
-  if (!user) {
-    window.location.href = "/"; // root login page
-  }
-        function formatDate(iso) {
-  return new Date(iso).toLocaleString();
-}
+  if (!user) window.location.href = "/"; // login page
 
-const userEmail = localStorage.getItem("loggedInUser");
-const previous = localStorage.getItem("previousLoginForSession");
-const loginInfo = document.getElementById("loginInfo");
+  // --- LAST LOGIN DISPLAY ---
+  function formatDate(iso) {
+    return new Date(iso).toLocaleString();
+  }
+
+  const userEmail = localStorage.getItem("loggedInUser");
+  const previous = localStorage.getItem("previousLoginForSession");
+  const loginInfo = document.getElementById("loginInfo");
 
 if (loginInfo && userEmail) {
-  loginInfo.innerHTML = previous
-    ? `Signed in as <b>${userEmail}</b> — Last login: <b>${formatDate(previous)}</b>`
-    : `Signed in as <b>${userEmail}</b> — This is your <b>first login</b>.`;
-}
-        // ✅ LOGOUT FUNCTION
-function logout() {
-  localStorage.removeItem("loggedInUser");
-  localStorage.removeItem("previousLoginForSession");
-  window.location.href = "/"; // go back to login page (index.html)
-}
-    </script>
+    loginInfo.innerHTML = previous
+      ? `Signed in as <b>${userEmail}</b> — Last login: <b>${formatDate(previous)}</b>`
+      : `Signed in as <b>${userEmail}</b> — This is your <b>first login</b>.`;
+  }
+
+  // --- LOGOUT ---
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("previousLoginForSession");
+    window.location.href = "/";
+  }
+        
         // ---------------------------------------------------------
         // DATASET & CONSTANTS
         // ---------------------------------------------------------
