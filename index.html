@@ -3,78 +3,293 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - India Real Estate Analyzer</title>
+  <title>Login | India Real Estate Analyzer</title>
 
-  <!-- Bootstrap 5 CDN -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap 5 CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
 
   <style>
-    body {
-      min-height: 100vh;
-      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 60%);
-      display: grid;
-      place-items: center;
+    :root{
+      --bg1:#0f172a;
+      --bg2:#111827;
+      --card: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.14);
+      --text: #e2e8f0;
+      --dim: #94a3b8;
+      --accent: #3b82f6;
     }
-    .card {
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06);
-      backdrop-filter: blur(10px);
-      color: #e2e8f0;
+
+    body{
+      min-height:100vh;
+      margin:0;
+      color: var(--text);
+      background:
+        radial-gradient(1000px 600px at 20% 10%, rgba(59,130,246,0.30), transparent 55%),
+        radial-gradient(900px 500px at 90% 20%, rgba(16,185,129,0.22), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg1));
+      display:grid;
+      place-items:center;
+      overflow-x:hidden;
+    }
+
+    .login-wrap{
+      width: min(980px, 92vw);
+      display:grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 992px){
+      .login-wrap{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      border: 1px solid var(--border);
+      background: var(--card);
       border-radius: 18px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+      overflow:hidden;
     }
-    .form-control {
-      background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: #fff;
+
+    .left{
+      padding: 26px;
+      position: relative;
     }
-    .form-control:focus {
-      background: rgba(0,0,0,0.25);
-      color: #fff;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 0.2rem rgba(59,130,246,.25);
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom: 14px;
     }
-    .small-note { color: #94a3b8; font-size: 12px; }
+    .brand .logo{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(59,130,246,0.18);
+      border: 1px solid rgba(59,130,246,0.28);
+      display:grid;
+      place-items:center;
+      font-size: 22px;
+    }
+    .brand h1{
+      font-size: 18px;
+      margin: 0;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .brand p{
+      margin:0;
+      color: var(--dim);
+      font-size: 12px;
+    }
+
+    .feature{
+      margin-top: 18px;
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.18);
+    }
+    .feature .kicker{
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(148,163,184,0.95);
+      font-weight: 700;
+    }
+    .feature ul{
+      margin: 10px 0 0 0;
+      padding-left: 18px;
+      color: rgba(226,232,240,0.95);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .right{
+      padding: 26px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap: 14px;
+    }
+
+    .title{
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+    }
+    .subtitle{
+      margin: 0;
+      font-size: 13px;
+      color: var(--dim);
+    }
+
+    .form-label{
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(226,232,240,0.85);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .form-control{
+      background: rgba(0,0,0,0.22) !important;
+      color: #fff !important;
+      border: 1px solid rgba(255,255,255,0.14) !important;
+      border-radius: 12px !important;
+      padding: 12px 12px !important;
+    }
+    .form-control:focus{
+      box-shadow: 0 0 0 0.2rem rgba(59,130,246,.18) !important;
+      border-color: rgba(59,130,246,0.55) !important;
+    }
+
+    .btn-primary{
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-weight: 800;
+      background: var(--accent);
+      border-color: rgba(59,130,246,0.55);
+    }
+    .btn-primary:hover{
+      background: #2563eb;
+      border-color: rgba(37,99,235,0.75);
+    }
+
+    .small-note{
+      font-size: 12px;
+      color: var(--dim);
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.18);
+      font-size: 12px;
+      color: rgba(226,232,240,0.90);
+    }
+
+    .muted-link{
+      color: rgba(148,163,184,0.95);
+      text-decoration: none;
+    }
+    .muted-link:hover{ color:#cbd5e1; text-decoration: underline; }
   </style>
 </head>
 
 <body>
-  <div class="container px-3">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card p-4 shadow-lg">
-          <div class="d-flex align-items-center gap-2 mb-3">
-            <span class="fs-3">🏠</span>
-            <div>
-              <h5 class="mb-0">India Real Estate Analyzer</h5>
-              <div class="small-note">Sign in to continue</div>
-            </div>
-          </div>
 
-          <div id="alertBox" class="alert alert-danger d-none" role="alert"></div>
+  <div class="login-wrap">
 
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input id="email" type="email" class="form-control" placeholder="name@example.com">
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input id="password" type="password" class="form-control" placeholder="Enter password">
-          </div>
-
-          <button class="btn btn-primary w-100" onclick="login()">Login</button>
-
-          <div class="mt-3 small-note">
-            Demo credentials: <b>test@example.com</b> / <b>1234</b>
-          </div>
+    <!-- LEFT INFO PANEL -->
+    <div class="panel left">
+      <div class="brand">
+        <div class="logo">🏠</div>
+        <div>
+          <h1>India Real Estate Analyzer</h1>
+          <p>BITS Pilani WILP • Market Intelligence Dashboard</p>
         </div>
       </div>
+
+      <div class="d-flex flex-wrap gap-2 mt-2">
+        <span class="pill">✅ Login-first flow</span>
+        <span class="pill">🕒 Last login tracking</span>
+        <span class="pill">📌 LocalStorage (demo)</span>
+      </div>
+
+      <div class="feature">
+        <div class="kicker">What you get after login</div>
+        <ul>
+          <li>Access to dashboard at <b>/app.html</b></li>
+          <li>Shows your previous login date/time</li>
+          <li>Saves last 5 login timestamps (history)</li>
+        </ul>
+      </div>
+
+      <div class="mt-3 small-note">
+        Note: This login is for demo/academic use. For real auth across devices, use Firebase/Supabase.
+      </div>
+    </div>
+
+    <!-- RIGHT LOGIN PANEL -->
+    <div class="panel right">
+
+      <div>
+        <h2 class="title">Sign in</h2>
+        <p class="subtitle">Enter your credentials to open the dashboard.</p>
+      </div>
+
+      <div id="alertBox" class="alert alert-danger d-none mb-0" role="alert"></div>
+
+      <div>
+        <label class="form-label">Email</label>
+        <input id="email" type="email" class="form-control" placeholder="name@example.com" autocomplete="username" />
+      </div>
+
+      <div>
+        <label class="form-label">Password</label>
+        <input id="password" type="password" class="form-control" placeholder="Enter password" autocomplete="current-password" />
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="rememberMe" checked>
+          <label class="form-check-label small-note" for="rememberMe">
+            Remember me (this device)
+          </label>
+        </div>
+
+        <a class="muted-link small-note" href="#" onclick="demoFill(event)">Use demo</a>
+      </div>
+
+      <button class="btn btn-primary w-100" onclick="login()">Login</button>
+
+      <div id="lastLoginHint" class="small-note mt-1"></div>
+
+      <div class="small-note mt-2">
+        Demo credentials: <b>test@example.com</b> / <b>1234</b>
+      </div>
+
     </div>
   </div>
 
   <script>
-    // Demo-only credentials (simple local login)
+    /**
+     * DEMO LOGIN (Front-end only)
+     * Works well for Vite + Vercel static projects.
+     */
     const DEMO_USER = { email: "test@example.com", password: "1234" };
+
+    // If user already logged in, go straight to app
+    (function autoRedirectIfLoggedIn(){
+      const user = localStorage.getItem("loggedInUser");
+      if (user) window.location.href = "/app.html";
+    })();
+
+    // Show last login hint on login page if known
+    (function showLastLoginHint(){
+      const rememberedEmail = localStorage.getItem("rememberedEmail");
+      const hint = document.getElementById("lastLoginHint");
+      if (!hint) return;
+
+      if (rememberedEmail) {
+        document.getElementById("email").value = rememberedEmail;
+        const last = localStorage.getItem(`lastLogin_${rememberedEmail}`);
+        if (last) {
+          hint.innerHTML = `Last login for <b>${rememberedEmail}</b>: <b>${new Date(last).toLocaleString()}</b>`;
+        }
+      }
+    })();
 
     function showError(msg){
       const box = document.getElementById("alertBox");
@@ -82,39 +297,60 @@
       box.classList.remove("d-none");
     }
 
+    function clearError(){
+      const box = document.getElementById("alertBox");
+      box.classList.add("d-none");
+      box.textContent = "";
+    }
+
+    function demoFill(e){
+      e.preventDefault();
+      document.getElementById("email").value = DEMO_USER.email;
+      document.getElementById("password").value = DEMO_USER.password;
+      clearError();
+    }
+
     function login(){
-      const email = document.getElementById("email").value.trim().toLowerCase();
-      const pass  = document.getElementById("password").value;
+      clearError();
+
+      const email = (document.getElementById("email").value || "").trim().toLowerCase();
+      const pass  = document.getElementById("password").value || "";
+      const remember = document.getElementById("rememberMe").checked;
 
       if(!email || !pass) return showError("Please enter email and password.");
 
-      if(email !== DEMO_USER.email || pass !== DEMO_USER.password){
-        return showError("Invalid credentials. Try demo credentials.");
+      // demo validation
+      if (email !== DEMO_USER.email || pass !== DEMO_USER.password){
+        return showError("Invalid credentials. Click 'Use demo' or try test@example.com / 1234.");
       }
 
-      // Login ok
+      // Remember email (optional)
+      if (remember) localStorage.setItem("rememberedEmail", email);
+      else localStorage.removeItem("rememberedEmail");
+
+      // Mark session as logged in
       localStorage.setItem("loggedInUser", email);
 
-      // Last login tracking
+      // Track last login time + previous for this session
       const keyLast = `lastLogin_${email}`;
       const previous = localStorage.getItem(keyLast);
 
       const now = new Date().toISOString();
       localStorage.setItem(keyLast, now);
 
-      // Store session previous login (for display in index.html)
-      if(previous) localStorage.setItem("previousLoginForSession", previous);
+      if (previous) localStorage.setItem("previousLoginForSession", previous);
       else localStorage.removeItem("previousLoginForSession");
 
-      // History (keep last 5)
+      // Store history (last 5)
       const histKey = `loginHistory_${email}`;
       const hist = JSON.parse(localStorage.getItem(histKey) || "[]");
       hist.unshift(now);
       localStorage.setItem(histKey, JSON.stringify(hist.slice(0,5)));
 
-      // go to your app
+      // Go to dashboard page
       window.location.href = "/app.html";
     }
   </script>
+
 </body>
 </html>
