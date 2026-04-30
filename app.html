@@ -614,7 +614,7 @@
 // --- LOGIN GUARD ---
   const user = localStorage.getItem("loggedInUser");
   if (!user) {
-    window.location.href = "/login.html";
+    window.location.href = "/"; // root login page
   }
         function formatDate(iso) {
   return new Date(iso).toLocaleString();
@@ -633,7 +633,7 @@ if (loginInfo && userEmail) {
 function logout() {
   localStorage.removeItem("loggedInUser");
   localStorage.removeItem("previousLoginForSession");
-  window.location.href = "/login.html";
+  window.location.href = "/"; // go back to login page (index.html)
 }
     </script>
         // ---------------------------------------------------------
