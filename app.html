@@ -611,23 +611,30 @@
     <!-- Scripting -->
     <script>
 // --- LOGIN GUARD ---
-  const user = localStorage.getItem("loggedInUser");
-  if (!user) window.location.href = "/"; // login page
+const user = localStorage.getItem("loggedInUser");
+const guest = localStorage.getItem("guestMode");
 
-  // --- LAST LOGIN DISPLAY ---
-  function formatDate(iso) {
-    return new Date(iso).toLocaleString();
-  }
+if (!user && !guest) window.location.href = "/";
 
-  const userEmail = localStorage.getItem("loggedInUser");
-  const previous = localStorage.getItem("previousLoginForSession");
-  const loginInfo = document.getElementById("loginInfo");
+  // --- LAST Information DISPLAY ---
+ function formatDate(iso) {
+  return new Date(iso).toLocaleString();
+}
 
-if (loginInfo && userEmail) {
+const userEmail = localStorage.getItem("loggedInUser");
+const guest = localStorage.getItem("guestMode");
+const previous = localStorage.getItem("previousLoginForSession");
+const loginInfo = document.getElementById("loginInfo");
+
+if (loginInfo) {
+  if (guest) {
+    loginInfo.innerHTML = `You are browsing as <b>Guest</b>. Create an account to save likes/history.`;
+  } else if (userEmail) {
     loginInfo.innerHTML = previous
       ? `Signed in as <b>${userEmail}</b> — Last login: <b>${formatDate(previous)}</b>`
       : `Signed in as <b>${userEmail}</b> — This is your <b>first login</b>.`;
   }
+}
 
   // --- LOGOUT ---
   function logout() {
