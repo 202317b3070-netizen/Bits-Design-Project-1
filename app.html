@@ -613,8 +613,8 @@
 // --- LOGIN GUARD ---
 const user = localStorage.getItem("loggedInUser");
 const guest = localStorage.getItem("guestMode");
-
 if (!user && !guest) window.location.href = "/";
+
 
   // --- LAST Information DISPLAY ---
  function formatDate(iso) {
@@ -637,11 +637,12 @@ if (loginInfo) {
 }
 
   // --- LOGOUT ---
- function logout() {
+function logout() {
   localStorage.removeItem("loggedInUser");
   localStorage.removeItem("guestMode");
   localStorage.removeItem("previousLoginForSession");
   window.location.href = "/";
+}
 }
         
         // ---------------------------------------------------------
