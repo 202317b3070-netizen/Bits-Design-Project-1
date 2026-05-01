@@ -637,11 +637,12 @@ if (loginInfo) {
 }
 
   // --- LOGOUT ---
-  function logout() {
-    localStorage.removeItem("loggedInUser");
-    localStorage.removeItem("previousLoginForSession");
-    window.location.href = "/";
-  }
+ function logout() {
+  localStorage.removeItem("loggedInUser");
+  localStorage.removeItem("guestMode");
+  localStorage.removeItem("previousLoginForSession");
+  window.location.href = "/";
+}
         
         // ---------------------------------------------------------
         // DATASET & CONSTANTS
