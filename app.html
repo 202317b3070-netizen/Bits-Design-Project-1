@@ -611,80 +611,9 @@
     <!-- Scripting -->
     <script>
 // --- LOGIN GUARD ---
-        const user = localStorage.getItem("loggedInUser");
-const guest = localStorage.getItem("guestMode");
-
-if (!user && !guest) {
-  window.location.href = "/"; // back to login page
-}
-        
-/ ==========================
-  // 1) USER STORAGE HELPERS
-  // ==========================
-
-function saveUsers(users) {
-  localStorage.setItem("appUsers", JSON.stringify(users));
-}
-
-// simple hashing (better than plain text; still not perfect without backend)
-async function hashPassword(password) {
-  const enc = new TextEncoder().encode(password);
-  const buf = await crypto.subtle.digest("SHA-256", enc);
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
-}
   const user = localStorage.getItem("loggedInUser");
   if (!user) window.location.href = "/"; // login page
 
-        //Signup Funtion----------------------------
-
-        async function signup() {
-  const email = document.getElementById("signupEmail").value.trim().toLowerCase();
-  const pass = document.getElementById("signupPassword").value;
-
-  if (!email || !pass) return showError("Please enter email and password.");
-  if (pass.length < 4) return showError("Password must be at least 4 characters.");
-
-  const users = loadUsers();
-  if (users[email]) return showError("Account already exists. Please login.");
-
-  const hash = await hashPassword(pass);
-  users[email] = { hash, createdAt: new Date().toISOString() };
-  saveUsers(users);
-
-  // auto login after signup
-  localStorage.setItem("loggedInUser", email);
-  localStorage.removeItem("guestMode");
-  window.location.href = "/app.html";
-}
-
-        //Existing user login
-async function login() {
-  const email = document.getElementById("email").value.trim().toLowerCase();
-  const pass = document.getElementById("password").value;
-
-  if (!email || !pass) return showError("Please enter email and password.");
-
-  const users = loadUsers();
-  if (!users[email]) return showError("No account found. Please sign up.");
-
-  const hash = await hashPassword(pass);
-  if (hash !== users[email].hash) return showError("Incorrect password.");
-
-  // track last login
-  const keyLast = `lastLogin_${email}`;
-  const previous = localStorage.getItem(keyLast);
-  const now = new Date().toISOString();
-  localStorage.setItem(keyLast, now);
-
-  if (previous) localStorage.setItem("previousLoginForSession", previous);
-  else localStorage.removeItem("previousLoginForSession");
-
-  // save session
-  localStorage.setItem("loggedInUser", email);
-  localStorage.removeItem("guestMode");
-
-  window.location.href = "/app.html";
-}
   // --- LAST LOGIN DISPLAY ---
   function formatDate(iso) {
     return new Date(iso).toLocaleString();
@@ -706,7 +635,6 @@ if (loginInfo && userEmail) {
     localStorage.removeItem("previousLoginForSession");
     window.location.href = "/";
   }
-        
         
         // ---------------------------------------------------------
         // DATASET & CONSTANTS
