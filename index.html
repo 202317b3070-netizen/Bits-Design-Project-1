@@ -235,38 +235,64 @@
 
 </div>
 <script>
- <script>
-  function showError(msg) { alert(msg); }
-  function clearError() {}
+  // -------------------------
+  // UI helpers
+  // -------------------------
+  function showError(msg) {
+    const box = document.getElementById("alertBox");
+    if (!box) return alert(msg);
+    box.textContent = msg;
+    box.classList.remove("d-none");
+  }
 
+  function clearError() {
+    const box = document.getElementById("alertBox");
+    if (!box) return;
+    box.classList.add("d-none");
+    box.textContent = "";
+  }
+
+  // -------------------------
+  // Storage helpers
+  // -------------------------
   function loadUsers() {
     return JSON.parse(localStorage.getItem("appUsers") || "{}");
   }
+
   function saveUsers(users) {
     localStorage.setItem("appUsers", JSON.stringify(users));
   }
+
   async function hashPassword(password) {
     const enc = new TextEncoder().encode(password);
     const buf = await crypto.subtle.digest("SHA-256", enc);
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+    return Array.from(new Uint8Array(buf))
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("");
   }
+
   function validEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
-  // Auto redirect if already logged in or guest
+  // If already logged in or guest, go directly
   (function autoRedirect() {
     const user = localStorage.getItem("loggedInUser");
     const guest = localStorage.getItem("guestMode");
     if (user || guest) window.location.href = "/app.html";
   })();
 
+  // -------------------------
+  // Create Account
+  // -------------------------
   async function signup() {
-    const email = (document.getElementById("signupEmail").value || "").trim().toLowerCase();
-    const pass = (document.getElementById("signupPassword").value || "");
+    clearError();
 
-    if (!email || !pass) return showError("Enter email and password to create account.");
-    if (!validEmail(email)) return showError("Enter a valid email address.");
+    const email = (document.getElementById("signupEmail")?.value || "").trim().toLowerCase();
+    const pass = (document.getElementById("signupPassword")?.value || "");
+
+    if (!email || !pass) return showError("Please enter email and password to create an account.");
+    if (!validEmail(email)) return showError("Please enter a valid email address.");
     if (pass.length < 4) return showError("Password must be at least 4 characters.");
 
     const users = loadUsers();
@@ -283,9 +309,74 @@
     window.location.href = "/app.html";
   }
 
+  // -------------------------
+  // Login (Existing user)
+  // -------------------------
   async function login() {
-    const email = (document.getElementById("email").value ||
-</script>
+    clearError();
 
+    const email = (document.getElementById("email")?.value || "").trim().toLowerCase();
+    const pass = (document.getElementById("password")?.value || "");
+    const remember = document.getElementById("rememberMe")?.checked;
+
+    if (!email || !pass) return showError("Please enter email and password.");
+    if (!validEmail(email)) return showError("Please enter a valid email address.");
+
+    const users = loadUsers();
+    if (!users[email]) return showError("No account found. Please create an account or use Demo/Guest.");
+
+    const hash = await hashPassword(pass);
+    if (hash !== users[email].hash) return showError("Incorrect password.");
+
+    if (remember) localStorage.setItem("rememberedEmail", email);
+    else localStorage.removeItem("rememberedEmail");
+
+    localStorage.setItem("loggedInUser", email);
+    localStorage.removeItem("guestMode");
+
+    const keyLast = `lastLogin_${email}`;
+    const previous = localStorage.getItem(keyLast);
+    const now = new Date().toISOString();
+    localStorage.setItem(keyLast, now);
+
+    if (previous) localStorage.setItem("previousLoginForSession", previous);
+    else localStorage.removeItem("previousLoginForSession");
+
+    window.location.href = "/app.html";
+  }
+
+  // -------------------------
+  // Demo Login
+  // -------------------------
+  async function demoLogin() {
+    clearError();
+
+    const email = "test@example.com";
+    const pass = "1234";
+
+    const users = loadUsers();
+    if (!users[email]) {
+      users[email] = { hash: await hashPassword(pass), createdAt: new Date().toISOString() };
+      saveUsers(users);
+    }
+
+    localStorage.setItem("loggedInUser", email);
+    localStorage.removeItem("guestMode");
+    localStorage.removeItem("previousLoginForSession");
+
+    window.location.href = "/app.html";
+  }
+
+  // -------------------------
+  // Guest Mode
+  // -------------------------
+  function continueAsGuest() {
+    clearError();
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("previousLoginForSession");
+    localStorage.setItem("guestMode", "1");
+    window.location.href = "/app.html";
+  }
+</script>
 </body>
 </html>
