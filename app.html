@@ -611,6 +611,24 @@
     <!-- Scripting -->
     <script>
 // --- LOGIN GUARD ---
+        function loadUsers() {
+  return JSON.parse(localStorage.getItem("appUsers") || "{}");
+}
+        
+/ ==========================
+  // 1) USER STORAGE HELPERS
+  // ==========================
+
+function saveUsers(users) {
+  localStorage.setItem("appUsers", JSON.stringify(users));
+}
+
+// simple hashing (better than plain text; still not perfect without backend)
+async function hashPassword(password) {
+  const enc = new TextEncoder().encode(password);
+  const buf = await crypto.subtle.digest("SHA-256", enc);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
   const user = localStorage.getItem("loggedInUser");
   if (!user) window.location.href = "/"; // login page
 
