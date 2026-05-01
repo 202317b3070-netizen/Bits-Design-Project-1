@@ -232,217 +232,173 @@
   </div>
 
 </div>
-
-
-  <script>
-    /**
-     * DEMO LOGIN (Front-end only)
-     * Works well for Vite + Vercel static projects.
-     */
-    // ==========================
-// USER STORAGE (REGISTERED ACCOUNTS)
-// ==========================
-function loadUsers() {
-  return JSON.parse(localStorage.getItem("appUsers") || "{}");
-}
-
-function saveUsers(users) {
-  localStorage.setItem("appUsers", JSON.stringify(users));
-}
-
-// Demo-only hashing (better than plain text; still not secure without backend)
-async function hashPassword(password) {
-  const enc = new TextEncoder().encode(password);
-  const buf = await crypto.subtle.digest("SHA-256", enc);
-  return Array.from(new Uint8Array(buf))
-    .map(b => b.toString(16).padStart(2, "0"))
-    .join("");
-}
-    const DEMO_USER = { email: "test@example.com", password: "1234" };
-
-    // If user already logged in, go straight to app
-    (function autoRedirectIfLoggedIn(){
-      const user = localStorage.getItem("loggedInUser");
-      if (user) window.location.href = "/app.html";
-    })();
-
-    // Show last login hint on login page if known
-    (function showLastLoginHint(){
-      const rememberedEmail = localStorage.getItem("rememberedEmail");
-      const hint = document.getElementById("lastLoginHint");
-      if (!hint) return;
-
-      if (rememberedEmail) {
-        document.getElementById("email").value = rememberedEmail;
-        const last = localStorage.getItem(`lastLogin_${rememberedEmail}`);
-        if (last) {
-          hint.innerHTML = `Last login for <b>${rememberedEmail}</b>: <b>${new Date(last).toLocaleString()}</b>`;
-        }
-      }
-    })();
-
-    function showError(msg){
-      const box = document.getElementById("alertBox");
-      box.textContent = msg;
-      box.classList.remove("d-none");
-    }
-
-    function clearError(){
-      const box = document.getElementById("alertBox");
-      box.classList.add("d-none");
-      box.textContent = "";
-    }
-
-    function demoFill(e){
-      e.preventDefault();
-      document.getElementById("email").value = DEMO_USER.email;
-      document.getElementById("password").value = DEMO_USER.password;
-      clearError();
-    }
-
-    async function login() {
-  clearError();
-
-  const email = (document.getElementById("email").value || "").trim().toLowerCase();
-  const pass = (document.getElementById("password").value || "");
-
-  if (!email || !pass) return showError("Please enter email and password.");
-
-  const users = loadUsers();
-  if (!users[email]) {
-    return showError("No account found. Please create a new account (Sign up) or use Demo/Guest.");
+<script>
+  // -------------------------
+  // UI helpers
+  // -------------------------
+  function showError(msg) {
+    const box = document.getElementById("alertBox");
+    if (!box) return alert(msg);
+    box.textContent = msg;
+    box.classList.remove("d-none");
   }
 
-  const hash = await hashPassword(pass);
-  if (hash !== users[email].hash) {
-    return showError("Incorrect password. Please try again.");
+  function clearError() {
+    const box = document.getElementById("alertBox");
+    if (!box) return;
+    box.classList.add("d-none");
+    box.textContent = "";
   }
 
-  // Remember login session
-  localStorage.setItem("loggedInUser", email);
-  localStorage.removeItem("guestMode");
+  // -------------------------
+  // User storage (accounts)
+  // -------------------------
+  function loadUsers() {
+    return JSON.parse(localStorage.getItem("appUsers") || "{}");
+  }
 
-  // Track last login + previous login for session
-  const keyLast = `lastLogin_${email}`;
-  const previous = localStorage.getItem(keyLast);
-  const now = new Date().toISOString();
-  localStorage.setItem(keyLast, now);
+  function saveUsers(users) {
+    localStorage.setItem("appUsers", JSON.stringify(users));
+  }
 
-  if (previous) localStorage.setItem("previousLoginForSession", previous);
-  else localStorage.removeItem("previousLoginForSession");
+  // Demo-only hashing (still not "secure", but better than plain text)
+  async function hashPassword(password) {
+    const enc = new TextEncoder().encode(password);
+    const buf = await crypto.subtle.digest("SHA-256", enc);
+    return Array.from(new Uint8Array(buf))
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("");
+  }
 
-  // History (last 5)
-  const histKey = `loginHistory_${email}`;
-  const hist = JSON.parse(localStorage.getItem(histKey) || "[]");
-  hist.unshift(now);
-  localStorage.setItem(histKey, JSON.stringify(hist.slice(0, 5)));
+  // Basic email validation
+  function validEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
 
-  window.location.href = "/app.html";
-}
-      // demo validation
-      // Basic email validation only
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-if (!emailPattern.test(email)) {
-  return showError("Please enter a valid email address.");
-}
+  // If already logged in or guest, go to app directly
+  (function autoRedirect() {
+    const user = localStorage.getItem("loggedInUser");
+    const guest = localStorage.getItem("guestMode");
+    if (user || guest) window.location.href = "/app.html";
+  })();
 
-// Optional: password rule (not validated against database)
-if (pass.length < 3) {
-  return showError("Password should be at least 3 characters.");
-}
-    async function signup() {
-  clearError();
+  // -------------------------
+  // ACTION: Sign up
+  // -------------------------
+  async function signup() {
+    clearError();
 
-  const email = (document.getElementById("signupEmail").value || "").trim().toLowerCase();
-  const pass = (document.getElementById("signupPassword").value || "");
+    const email = (document.getElementById("signupEmail")?.value || "").trim().toLowerCase();
+    const pass = (document.getElementById("signupPassword")?.value || "");
 
-  if (!email || !pass) return showError("Please enter email and password to sign up.");
-  if (pass.length < 4) return showError("Password must be at least 4 characters.");
+    if (!email || !pass) return showError("Please enter email and password to create an account.");
+    if (!validEmail(email)) return showError("Please enter a valid email address.");
+    if (pass.length < 4) return showError("Password must be at least 4 characters.");
 
-  const users = loadUsers();
-  if (users[email]) return showError("Account already exists. Please login instead.");
+    const users = loadUsers();
+    if (users[email]) return showError("Account already exists. Please login instead.");
 
-  users[email] = {
-    hash: await hashPassword(pass),
-    createdAt: new Date().toISOString()
-  };
-  saveUsers(users);
-
-  // Auto-login after signup
-  localStorage.setItem("loggedInUser", email);
-  localStorage.removeItem("guestMode");
-  localStorage.removeItem("previousLoginForSession");
-
-  // Set first login time
-  localStorage.setItem(`lastLogin_${email}`, new Date().toISOString());
-
-  window.location.href = "/app.html";
-}
-
-async function demoLogin() {
-  clearError();
-
-  const email = "test@example.com";
-  const pass = "1234";
-
-  // Ensure demo account exists in appUsers
-  const users = loadUsers();
-  if (!users[email]) {
-    users[email] = { hash: await hashPassword(pass), createdAt: new Date().toISOString() };
+    users[email] = {
+      hash: await hashPassword(pass),
+      createdAt: new Date().toISOString()
+    };
     saveUsers(users);
+
+    // start session
+    localStorage.setItem("loggedInUser", email);
+    localStorage.removeItem("guestMode");
+
+    // login tracking
+    localStorage.setItem(`lastLogin_${email}`, new Date().toISOString());
+    localStorage.removeItem("previousLoginForSession");
+
+    window.location.href = "/app.html";
   }
 
-  // Login as demo
-  localStorage.setItem("loggedInUser", email);
-  localStorage.removeItem("guestMode");
+  // -------------------------
+  // ACTION: Login
+  // -------------------------
+  async function login() {
+    clearError();
 
-  const keyLast = `lastLogin_${email}`;
-  const previous = localStorage.getItem(keyLast);
-  const now = new Date().toISOString();
-  localStorage.setItem(keyLast, now);
+    const email = (document.getElementById("email")?.value || "").trim().toLowerCase();
+    const pass = (document.getElementById("password")?.value || "");
+    const remember = document.getElementById("rememberMe")?.checked;
 
-  if (previous) localStorage.setItem("previousLoginForSession", previous);
-  else localStorage.removeItem("previousLoginForSession");
+    if (!email || !pass) return showError("Please enter email and password.");
+    if (!validEmail(email)) return showError("Please enter a valid email address.");
 
-  window.location.href = "/app.html";
-}
+    const users = loadUsers();
+    if (!users[email]) return showError("No account found. Please create an account or use Demo/Guest.");
 
-function continueAsGuest() {
-  clearError();
-  localStorage.removeItem("loggedInUser");
-  localStorage.removeItem("previousLoginForSession");
-  localStorage.setItem("guestMode", "1");
-  window.location.href = "/app.html";
-}
+    const hash = await hashPassword(pass);
+    if (hash !== users[email].hash) return showError("Incorrect password.");
 
+    if (remember) localStorage.setItem("rememberedEmail", email);
+    else localStorage.removeItem("rememberedEmail");
 
-      // Remember email (optional)
-      if (remember) localStorage.setItem("rememberedEmail", email);
-      else localStorage.removeItem("rememberedEmail");
+    localStorage.setItem("loggedInUser", email);
+    localStorage.removeItem("guestMode");
 
-      // Mark session as logged in
-      localStorage.setItem("loggedInUser", email);
+    // last login tracking
+    const keyLast = `lastLogin_${email}`;
+    const previous = localStorage.getItem(keyLast);
+    const now = new Date().toISOString();
+    localStorage.setItem(keyLast, now);
 
-      // Track last login time + previous for this session
-      const keyLast = `lastLogin_${email}`;
-      const previous = localStorage.getItem(keyLast);
+    if (previous) localStorage.setItem("previousLoginForSession", previous);
+    else localStorage.removeItem("previousLoginForSession");
 
-      const now = new Date().toISOString();
-      localStorage.setItem(keyLast, now);
+    // history list (last 5)
+    const histKey = `loginHistory_${email}`;
+    const hist = JSON.parse(localStorage.getItem(histKey) || "[]");
+    hist.unshift(now);
+    localStorage.setItem(histKey, JSON.stringify(hist.slice(0, 5)));
 
-      if (previous) localStorage.setItem("previousLoginForSession", previous);
-      else localStorage.removeItem("previousLoginForSession");
+    window.location.href = "/app.html";
+  }
 
-      // Store history (last 5)
-      const histKey = `loginHistory_${email}`;
-      const hist = JSON.parse(localStorage.getItem(histKey) || "[]");
-      hist.unshift(now);
-      localStorage.setItem(histKey, JSON.stringify(hist.slice(0,5)));
+  // -------------------------
+  // ACTION: Demo login
+  // -------------------------
+  async function demoLogin() {
+    clearError();
 
-      // Go to dashboard page
-      window.location.href = "/app.html";
+    const email = "test@example.com";
+    const pass = "1234";
+
+    const users = loadUsers();
+    if (!users[email]) {
+      users[email] = { hash: await hashPassword(pass), createdAt: new Date().toISOString() };
+      saveUsers(users);
     }
-  </script>
+
+    localStorage.setItem("loggedInUser", email);
+    localStorage.removeItem("guestMode");
+
+    // last login tracking
+    const keyLast = `lastLogin_${email}`;
+    const previous = localStorage.getItem(keyLast);
+    const now = new Date().toISOString();
+    localStorage.setItem(keyLast, now);
+
+    if (previous) localStorage.setItem("previousLoginForSession", previous);
+    else localStorage.removeItem("previousLoginForSession");
+
+    window.location.href = "/app.html";
+  }
+
+  // -------------------------
+  // ACTION: Guest
+  // -------------------------
+  function continueAsGuest() {
+    clearError();
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("previousLoginForSession");
+    localStorage.setItem("guestMode", "1");
+    window.location.href = "/app.html";
+  }
+</script>
 
 </body>
 </html>
