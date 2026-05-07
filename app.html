@@ -797,25 +797,26 @@ trainLinearRegression(marketData);
             const jitter = 0.98 + (Math.random() * 0.04);
             return Math.round(price * jitter);
         }
-
         function generateDataset() {
-            marketData = [];
-            const cities = Object.keys(LOCATIONS);
-            
-            for (let i = 0; i < 150; i++) {
-                const city = cities[Math.floor(Math.random() * cities.length)];
-                const localities = Object.keys(LOCATIONS[city].localities);
-                const locality = localities[Math.floor(Math.random() * localities.length)];
-                
-                const sqft = 600 + Math.floor(Math.random() * 2400);
-                const bhk = sqft < 1000 ? 1 : (sqft < 1800 ? 2 : (sqft < 2500 ? 3 : 4));
-                const age = Math.floor(Math.random() * 25);
-                
-                const price = calculatePrice(city, locality, sqft, bhk, age);
-                
-                const price = predictMLPrice(sqft, bhk, age);
-            }
-        }
+  marketData = [];
+  const cities = Object.keys(LOCATIONS);
+
+  for (let i = 0; i < 150; i++) {
+    const city = cities[Math.floor(Math.random() * cities.length)];
+    const localities = Object.keys(LOCATIONS[city].localities);
+    const locality = localities[Math.floor(Math.random() * localities.length)];
+
+    const sqft = 600 + Math.floor(Math.random() * 2400);
+    const bhk = sqft < 1000 ? 1 : (sqft < 1800 ? 2 : (sqft < 2500 ? 3 : 4));
+    const age = Math.floor(Math.random() * 25);
+
+    // ✅ choose only ONE price source
+    const price = predictMLPrice(sqft, bhk, age);   // ML prediction
+
+    // ✅ push row
+    marketData.push({ city, locality, sqft, bhk, age, price });
+  }
+}
 
         // ---------------------------------------------------------
         // UI MANIPULATION
@@ -865,7 +866,7 @@ trainLinearRegression(marketData);
             const bhk = parseInt(document.getElementById('bhk-slider').value);
             const age = parseInt(document.getElementById('age-slider').value);
             
-            const price = calculatePrice(city, locality, sqft, bhk, age);
+            const price = predictMLPrice(sqft, bhk, age);
             
             // Animate price counter
             const priceEl = document.getElementById('predicted-price');
