@@ -648,7 +648,16 @@ function logout() {
             bedroom: 0.12, // 12% increase per room
             agePenalty: 0.015 // 1.5% decrease per year
         };
+function getLocationFeatures(city, locality) {
+  const cityData = LOCATIONS[city];
 
+  // fallback safety
+  const basePrice = cityData?.basePrice ?? 0;
+  const locMult = cityData?.localities?.[locality] ?? 1.0;
+
+  return { basePrice, locMult };
+}
+``
         let marketData = [];
         let charts = {};
 
@@ -681,52 +690,56 @@ function logout() {
 }
         // ------------Train a Linear Regression model------------
         //--------------------------------------------------------
-        let model = { w: [0, 0, 0], b: 0 }; // weights for sqft,bhk,age
+        let model = { w: [0, 0, 0, 0, 0], b: 0 }; // [sqft, bhk, age, basePrice, locMult]
 
-function trainLinearRegression(data, epochs = 800, lr = 0.00000000005) {
-  // Optional: normalize features to improve training
-  // For simplicity, we’ll do basic training first.
-
-  let w = [0, 0, 0];
+function trainLinearRegression(data, epochs = 1200, lr = 0.000000000000001) {
+  let w = [0, 0, 0, 0, 0];
   let b = 0;
 
   for (let e = 0; e < epochs; e++) {
-    let dw = [0, 0, 0];
+    let dw = [0, 0, 0, 0, 0];
     let db = 0;
 
     for (const d of data) {
-      const x = [d.sqft, d.bhk, d.age];
+      // location numeric features from LOCATIONS
+      const { basePrice, locMult } = getLocationFeatures(d.city, d.locality);
+
+      const x = [d.sqft, d.bhk, d.age, basePrice, locMult];
       const y = d.price;
 
-      const yPred = (w[0]*x[0]) + (w[1]*x[1]) + (w[2]*x[2]) + b;
+      const yPred = w[0]*x[0] + w[1]*x[1] + w[2]*x[2] + w[3]*x[3] + w[4]*x[4] + b;
       const err = yPred - y;
 
       dw[0] += err * x[0];
       dw[1] += err * x[1];
       dw[2] += err * x[2];
+      dw[3] += err * x[3];
+      dw[4] += err * x[4];
       db += err;
     }
 
     // average gradients
-    dw = dw.map(v => v / data.length);
-    db = db / data.length;
+    for (let i = 0; i < dw.length; i++) dw[i] /= data.length;
+    db /= data.length;
 
-    // update
-    w[0] -= lr * dw[0];
-    w[1] -= lr * dw[1];
-    w[2] -= lr * dw[2];
+    // update parameters
+    for (let i = 0; i < w.length; i++) w[i] -= lr * dw[i];
     b -= lr * db;
   }
 
   model = { w, b };
-  console.log("✅ Linear model trained", model);
+  console.log("✅ Linear model trained with city+locality features:", model);
 }
         //-----------Predict using the trained model------------
-        function predictMLPrice(sqft, bhk, age) {
+    function predictMLPrice(city, locality, sqft, bhk, age) {
+  const { basePrice, locMult } = getLocationFeatures(city, locality);
+
   return Math.round(
     model.w[0]*sqft +
     model.w[1]*bhk +
     model.w[2]*age +
+    model.w[3]*basePrice +
+    model.w[4]*locMult +
     model.b
   );
 }
@@ -860,13 +873,13 @@ trainLinearRegression(marketData);
         }
 
         function updatePrediction() {
-            const city = document.getElementById('city-select').value;
-            const locality = document.getElementById('locality-select').value;
+          const city = document.getElementById('city-select').value;
+          const locality = document.getElementById('locality-select').value;
             const sqft = parseInt(document.getElementById('sqft-slider').value);
             const bhk = parseInt(document.getElementById('bhk-slider').value);
             const age = parseInt(document.getElementById('age-slider').value);
             
-            const price = predictMLPrice(sqft, bhk, age);
+         const price = predictMLPrice(city, locality, sqft, bhk, age);
             
             // Animate price counter
             const priceEl = document.getElementById('predicted-price');
