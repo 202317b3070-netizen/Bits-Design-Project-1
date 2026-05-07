@@ -660,6 +660,7 @@ function getLocationFeatures(city, locality) {
 ``
         let marketData = [];
         let charts = {};
+        let model = { w: [0,0,0,0,0], b: 0 };
 
   //  -----------------------------------
         //Load MarketCSV
@@ -704,7 +705,7 @@ function trainLinearRegression(data, epochs = 1200, lr = 0.000000000000001) {
       // location numeric features from LOCATIONS
       const { basePrice, locMult } = getLocationFeatures(d.city, d.locality);
 
-      const x = [d.sqft, d.bhk, d.age, basePrice, locMult];
+      const x = [d.sqft, d.bhk, d.age, d.basePrice, d.locMultiplier];
       const y = d.price;
 
       const yPred = w[0]*x[0] + w[1]*x[1] + w[2]*x[2] + w[3]*x[3] + w[4]*x[4] + b;
@@ -731,19 +732,16 @@ function trainLinearRegression(data, epochs = 1200, lr = 0.000000000000001) {
   console.log("✅ Linear model trained with city+locality features:", model);
 }
         //-----------Predict using the trained model------------
-    function predictMLPrice(city, locality, sqft, bhk, age) {
-  const { basePrice, locMult } = getLocationFeatures(city, locality);
-
+  function predictMLPrice(sqft, bhk, age, basePrice, locMultiplier) {
   return Math.round(
     model.w[0]*sqft +
     model.w[1]*bhk +
     model.w[2]*age +
     model.w[3]*basePrice +
-    model.w[4]*locMult +
+    model.w[4]*locMultiplier +
     model.b
   );
-}
-        
+}    
         // ---------------------------------------------------------
         // INITIALIZATION
         // ---------------------------------------------------------
@@ -873,8 +871,8 @@ trainLinearRegression(marketData);
         }
 
         function updatePrediction() {
-          const city = document.getElementById('city-select').value;
-          const locality = document.getElementById('locality-select').value;
+          const { basePrice, locMultiplier } = getLocationFeatures(city, locality);
+          const price = predictMLPrice(sqft, bhk, age, basePrice, locMultiplier);
             const sqft = parseInt(document.getElementById('sqft-slider').value);
             const bhk = parseInt(document.getElementById('bhk-slider').value);
             const age = parseInt(document.getElementById('age-slider').value);
