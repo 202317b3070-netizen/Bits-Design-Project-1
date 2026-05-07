@@ -1,0 +1,151 @@
+city,locality,sqft,bhk,age,price
+Delhi,Dwarka,1541,2,7,20200515
+Rishikesh,Laxman Jhula,984,1,23,4905896
+Belagavi,Tilakwadi,615,1,18,2412998
+Kanpur,Shastri Nagar,2063,3,8,14278628
+Amritsar,GT Road,2029,3,4,16093733
+Nizamabad,Bodhan Road,1736,2,14,6417260
+Ludhiana,Ferozepur Road,2962,4,11,24650327
+Delhi,Dwarka,2815,4,23,33606490
+Jodhpur,Ratanada,1582,2,7,10683318
+Gurugram,Sector 57,1879,3,9,30366322
+Lucknow,Indira Nagar,1021,2,15,7080641
+Faridabad,Sector 21,1193,2,11,10607917
+Kannur,Talap,2752,4,4,21599733
+Amritsar,Ranjit Avenue,1014,2,12,8494395
+Madurai,K Pudur,1857,3,1,10130739
+Tirupati,Renigunta,2858,4,18,14573846
+Prayagraj,Allahpur,1226,2,23,5397564
+Salem,Shevapet,1803,3,18,5843555
+Kochi,Kakkanad,623,1,20,4107757
+Chennai,Tambaram,2588,4,21,17630098
+Coimbatore,Saravanampatti,982,1,8,4682626
+Chennai,Porur,2454,3,5,18965996
+Delhi,Janakpuri,2997,4,2,55104182
+Mysuru,Vijayanagar,1453,2,23,6992414
+Coimbatore,Race Course,2151,3,15,18095636
+Erode,Perundurai,1751,2,2,6194480
+Udaipur,Pratap Nagar,2954,4,0,24358809
+Coimbatore,RS Puram,1458,2,14,9488306
+Chennai,Tambaram,882,1,9,5542361
+Kozhikode,Nadakkavu,2393,3,21,15427710
+Delhi,Rohini,1537,2,13,17406562
+Leh,Choglamsar,1796,2,19,10169739
+Chandigarh,IT Park,2527,4,19,30113259
+Kozhikode,Nadakkavu,895,1,4,6466912
+Kanpur,Kidwai Nagar,2168,3,7,15052576
+Noida,Expressway,1242,2,11,12936895
+Ludhiana,Pakhowal Road,905,1,24,4726250
+Tirunelveli,Vannarpettai,838,1,9,2514525
+Visakhapatnam,Madhurawada,2569,4,17,19469271
+Amritsar,GT Road,2086,3,13,14069566
+Coimbatore,RS Puram,1573,2,24,8520097
+Lucknow,Sushant Golf City,769,1,17,4831820
+Mohali,Zirakpur,1245,2,10,10329327
+Thrissur,Punkunnam,2237,3,11,14924183
+Bengaluru,HSR Layout,2707,4,14,42212333
+Kochi,Panampilly Nagar,2539,4,14,30220720
+Hyderabad,Manikonda,2522,4,16,31228214
+Belagavi,Angol,1860,3,20,7355056
+Warangal,Hanamkonda,666,1,2,3712989
+Rishikesh,Laxman Jhula,1888,3,9,15243192
+Tirupati,MR Palli,1226,2,4,8098752
+Dehradun,Sahastradhara Road,2450,3,5,23975681
+Kozhikode,Kallai,2308,3,4,16964446
+Tiruchirappalli,Woraiyur,763,1,2,3656143
+Lucknow,Aliganj,1169,2,7,8527019
+Gurugram,Udyog Vihar,2952,4,2,53118730
+Puducherry,Reddiarpalayam,1535,2,19,7251664
+Vellore,Katpadi,2465,3,15,10278573
+Hubballi,Gokul Road,1203,2,6,6139503
+Coimbatore,Saravanampatti,1576,2,0,9864612
+Dehradun,Clement Town,1055,2,12,7046101
+Prayagraj,Civil Lines,1386,2,24,7287763
+Salem,Shevapet,1259,2,18,3625734
+Prayagraj,Naini,2731,4,16,15468376
+Srinagar,Hazratbal,1903,3,17,12606969
+Leh,Choglamsar,2702,4,19,18598648
+Manali,Old Manali,1624,2,19,13778576
+Gurugram,Udyog Vihar,1575,2,14,18708211
+Vellore,Thorapadi,1313,2,18,3754072
+Coimbatore,Saibaba Colony,1143,2,7,8292217
+Kakinada,Ramanayyapeta,2717,4,23,12244784
+Vijayawada,Poranki,1795,2,6,11685270
+Belagavi,Angol,1042,2,22,3509834
+Hyderabad,Secunderabad,1162,2,8,12733328
+Noida,Expressway,660,1,5,6864463
+Salem,Meyyanur,2618,4,5,12343318
+Kannur,Talap,1986,3,12,12614524
+Srinagar,Hazratbal,1382,2,15,8677759
+Ludhiana,Sarabha Nagar,1689,2,18,13199065
+Jaipur,Jagatpura,1224,2,20,6966495
+Tirupati,Renigunta,1124,2,19,4639918
+Vellore,Thorapadi,1133,2,0,4389765
+Agra,Fatehabad Road,2012,3,10,14536596
+Dharamshala,McLeod Ganj,1810,3,12,18319337
+Vijayawada,Poranki,1409,2,24,6487521
+Coimbatore,Peelamedu,1859,3,8,11996124
+Srinagar,Hazratbal,1098,2,18,6478440
+Mysuru,Hebbal,642,1,5,3255973
+Shimla,Kasumpti,1454,2,4,13887975
+Rishikesh,Laxman Jhula,2626,4,22,17727135
+Puducherry,White Town,2187,3,20,16671201
+Bengaluru,Jayanagar,1552,2,11,19688373
+Jalandhar,Nakodar Road,1418,2,6,9531894
+Vellore,Thorapadi,1508,2,20,4177336
+Thiruvananthapuram,Kowdiar,1822,3,19,14473776
+Vijayawada,Gandhinagar,1082,2,10,7488884
+Visakhapatnam,MVP Colony,2058,3,0,24709427
+Udaipur,Pratap Nagar,1196,2,3,7912582
+Salem,Meyyanur,2381,3,9,9680844
+Jammu,Bahu Plaza,2061,3,5,15080818
+Agra,Fatehabad Road,2489,3,14,17033491
+Belagavi,Tilakwadi,1278,2,8,6670717
+Amritsar,Ranjit Avenue,1599,2,23,10435880
+Belagavi,Hindwadi,2441,3,12,12577692
+Tirupati,MR Palli,2579,4,13,17568345
+Srinagar,Hazratbal,2304,3,11,17210257
+Kakinada,Bhanugudi,940,1,20,3686297
+Haridwar,Jwalapur,830,1,20,3261395
+Kochi,Fort Kochi,649,1,19,4642032
+Mohali,Phase 7,1051,2,4,11297280
+Tiruchirappalli,K K Nagar,648,1,7,2634777
+Guntur,Amaravathi Road,1781,2,4,10768294
+Ludhiana,Dugri,1093,2,11,7096953
+Puducherry,Reddiarpalayam,2678,4,7,19384707
+Prayagraj,Allahpur,2706,4,20,15321874
+Madurai,Anna Nagar (MDU),2687,4,16,15803265
+Salem,Alagapuram,2827,4,1,16615903
+Delhi,Rohini,2378,3,11,30945107
+Srinagar,Hazratbal,2582,4,23,16491031
+Tirunelveli,Melapalayam,795,1,4,2322801
+Faridabad,Surajkund Road,1892,3,9,20979734
+Coimbatore,RS Puram,2771,4,8,24590426
+Thrissur,Mannuthy,1095,2,9,5920492
+Kakinada,Bhanugudi,723,1,8,3604743
+Kannur,Thana,1105,2,12,5980692
+Tiruchirappalli,Srirangam,2544,4,18,12909990
+Meerut,Modipuram,2962,4,16,17855086
+Rishikesh,Laxman Jhula,948,1,10,5971309
+Dharamshala,Naddi,1637,2,18,10017679
+Salem,Meyyanur,896,1,11,2810620
+Srinagar,Hazratbal,1515,2,22,8035313
+Guntur,Pattabhipuram,746,1,22,3046918
+Kannur,Chovva,1866,3,10,9983453
+Jalandhar,Cantt Area,1484,2,24,8345422
+Prayagraj,Allahpur,2305,3,7,15145261
+Noida,Sector 76,1132,2,17,10884601
+Kannur,Chovva,972,1,4,4614603
+Mangaluru,Surathkal,1489,2,22,6766363
+Salem,Shevapet,1901,3,13,6909685
+Thrissur,Punkunnam,2231,3,19,12831164
+Dehradun,ISBT Area,1506,2,23,8519515
+Kakinada,Ramanayyapeta,2043,3,21,8836042
+Kozhikode,Kovoor,2300,3,11,15578876
+Ludhiana,Sarabha Nagar,1177,2,11,10669485
+Coimbatore,RS Puram,2859,4,6,25925954
+Thrissur,Mannuthy,2346,3,17,12050915
+Jodhpur,Pal Road,2920,4,9,19898356
+Kanpur,Kalyanpur,1228,2,8,8159580
+Ghaziabad,Crossings Republik,1532,2,5,13392567
+Mangaluru,Bejai,2874,4,21,20047282
