@@ -679,6 +679,58 @@ function logout() {
 
   return data;
 }
+        // ------------Train a Linear Regression model------------
+        //--------------------------------------------------------
+        let model = { w: [0, 0, 0], b: 0 }; // weights for sqft,bhk,age
+
+function trainLinearRegression(data, epochs = 800, lr = 0.00000000005) {
+  // Optional: normalize features to improve training
+  // For simplicity, we’ll do basic training first.
+
+  let w = [0, 0, 0];
+  let b = 0;
+
+  for (let e = 0; e < epochs; e++) {
+    let dw = [0, 0, 0];
+    let db = 0;
+
+    for (const d of data) {
+      const x = [d.sqft, d.bhk, d.age];
+      const y = d.price;
+
+      const yPred = (w[0]*x[0]) + (w[1]*x[1]) + (w[2]*x[2]) + b;
+      const err = yPred - y;
+
+      dw[0] += err * x[0];
+      dw[1] += err * x[1];
+      dw[2] += err * x[2];
+      db += err;
+    }
+
+    // average gradients
+    dw = dw.map(v => v / data.length);
+    db = db / data.length;
+
+    // update
+    w[0] -= lr * dw[0];
+    w[1] -= lr * dw[1];
+    w[2] -= lr * dw[2];
+    b -= lr * db;
+  }
+
+  model = { w, b };
+  console.log("✅ Linear model trained", model);
+}
+        //-----------Predict using the trained model------------
+        function predictMLPrice(sqft, bhk, age) {
+  return Math.round(
+    model.w[0]*sqft +
+    model.w[1]*bhk +
+    model.w[2]*age +
+    model.b
+  );
+}
+        
         // ---------------------------------------------------------
         // INITIALIZATION
         // ---------------------------------------------------------
@@ -697,7 +749,8 @@ function logout() {
     alert("Unable to load locations file. Run using Live Server / local server.");
   }
 }
-  generateDataset();
+  marketData = await loadMarketCSV();
+trainLinearRegression(marketData);
   populateLocalities();
   initCharts();
   setupEventListeners();
@@ -760,7 +813,7 @@ function logout() {
                 
                 const price = calculatePrice(city, locality, sqft, bhk, age);
                 
-                marketData.push({ city, locality, sqft, bhk, age, price });
+                const price = predictMLPrice(sqft, bhk, age);
             }
         }
 
