@@ -882,53 +882,35 @@ const price = predictMLPrice(sqft, bhk, age, basePrice, locMult);
   const startVal = parseInt(priceEl.textContent.replace(/,/g, '')) || 0;
 
   animateValue(priceEl, startVal, price, 600);
+
+  // ✅ MOVE THIS INSIDE FUNCTION
+  let tag = document.getElementById('market-tag');
+  let gaugeRing = document.getElementById('gauge-fill-ring');
+  let gaugeText = document.getElementById('gauge-text');
+
+  const pricePerSqft = price / sqft;
+
+  let percentage = Math.round(((pricePerSqft - 3000) / 10000) * 100);
+  percentage = Math.max(0, Math.min(100, percentage));
+
+  gaugeText.textContent = percentage + '%';
+
+  gaugeRing.style.background =
+    `conic-gradient(var(--accent) ${percentage * 3.6}deg, transparent 0deg)`;
+
+  gaugeRing.style.border = 'none';
+
+  if (percentage < 35) {
+    tag.textContent = 'Highly Affordable';
+    tag.style.color = '#10b981';
+  } else if (percentage < 70) {
+    tag.textContent = 'Market Moderate';
+    tag.style.color = '#3b82f6';
+  } else {
+    tag.textContent = 'Premium Segment';
+    tag.style.color = '#f59e0b';
+  }
 }
-            
-            // Adjust market tag and gauge
-            let tag = document.getElementById('market-tag');
-            let gaugeRing = document.getElementById('gauge-fill-ring');
-            let gaugeText = document.getElementById('gauge-text');
-            
-            const pricePerSqft = price / sqft;
-            // Range 3000 to 13000 as typical range for visualization
-            let percentage = Math.round(((pricePerSqft - 3000) / 10000) * 100);
-            percentage = Math.max(0, Math.min(100, percentage));
-            
-            gaugeText.textContent = percentage + '%';
-            
-            // Update circular gauge using conic gradient for smooth visual
-            gaugeRing.style.background = `conic-gradient(var(--accent) ${percentage * 3.6}deg, transparent 0deg)`;
-            gaugeRing.style.border = 'none'; // Overriding the previous border logic
-
-            if (percentage < 35) {
-                tag.textContent = 'Highly Affordable';
-                tag.style.color = '#10b981';
-                tag.style.background = 'rgba(16, 185, 129, 0.1)';
-            } else if (percentage < 70) {
-                tag.textContent = 'Market Moderate';
-                tag.style.color = '#3b82f6';
-                tag.style.background = 'rgba(59, 130, 246, 0.1)';
-            } else {
-                tag.textContent = 'Premium Segment';
-                tag.style.color = '#f59e0b';
-                tag.style.background = 'rgba(245, 158, 11, 0.1)';
-            }
-        }
-
-        function animateValue(obj, start, end, duration) {
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                const current = Math.floor(progress * (end - start) + start);
-                obj.innerHTML = formatCurrency(current);
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
-            };
-            window.requestAnimationFrame(step);
-        }
-
         function populateTable() {
             const tbody = document.getElementById('data-table-body');
             tbody.innerHTML = '';
