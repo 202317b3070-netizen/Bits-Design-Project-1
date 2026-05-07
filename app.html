@@ -661,6 +661,37 @@ function getLocationFeatures(city, locality) {
         let charts = {};
         let model = { w: [0,0,0,0,0], b: 0 };
 
+        function populateCitiesDropdown() {
+  const citySelect = document.getElementById('city-select');
+  if (!citySelect) return;
+
+  citySelect.innerHTML = '';
+
+  Object.keys(LOCATIONS).sort().forEach(city => {
+    const opt = document.createElement('option');
+    opt.value = city;
+    opt.textContent = city;
+    citySelect.appendChild(opt);
+  });
+}
+        function animateValue(obj, start, end, duration) {
+  let startTimestamp = null;
+
+  const step = (timestamp) => {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    const current = Math.floor(progress * (end - start) + start);
+
+    obj.innerHTML = formatCurrency(current);
+
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
+    }
+  };
+
+  window.requestAnimationFrame(step);
+}
+
   //  -----------------------------------
         //Load MarketCSV
  //-------------------------------------
@@ -751,24 +782,30 @@ const x = [d.sqft, d.bhk, d.age, basePrice, locMult];
     console.error("Failed to load locations.json", err);
   }
 }
-
-window.onload = async () => {
-  await loadLocations();
-  marketData = await loadMarketCSV();
-  trainLinearRegression(marketData);
-
-  populateLocalities();
-  initCharts();
-  setupEventListeners();
-  updatePrediction();
-  populateTable();
-
-  setTimeout(() => {
-    const loader = document.getElementById('loading-overlay');
-    loader.style.opacity = '0';
-    setTimeout(() => loader.style.display = 'none', 1000);
-  }, 1200);
+window.onload = async () => {window.onload to load. Check console errors.");
+  } finally {
+    // Always hide loader
+    if (loader) {
+      loader.style.opacity = '0';
+      setTimeout(() => loader.style.display = 'none', 800);
+    }
+  }
 };
+  const loader = document.getElementById('loading-overlay');
+
+  try {
+    await loadLocations();
+    marketData = await loadMarketCSV();
+    trainLinearRegression(marketData);
+
+    populateLocalities();
+    initCharts();
+    setupEventListeners();
+    updatePrediction();
+    populateTable();
+
+  } catch (err) {
+    console.error("App init failed:", err);
 
         // ---------------------------------------------------------
         // CORE LOGIC (ML / MATH)
