@@ -648,23 +648,43 @@ function logout() {
             bedroom: 0.12, // 12% increase per room
             agePenalty: 0.015 // 1.5% decrease per year
         };
-function getLocationFeatures(city, locality) {
-  const cityData = LOCATIONS[city];
 
-  // fallback safety
-  const basePrice = cityData?.basePrice ?? 0;
-  const locMult = cityData?.localities?.[locality] ?? 1.0;
-
-  return { basePrice, locMult };
-}
         let marketData = [];
         let charts = {};
-        let model = { w: [0,0,0,0,0], b: 0 };
 
+        // ---------------------------------------------------------
+        // INITIALIZATION
+        // ---------------------------------------------------------
+       window.onload = async () => {
+  await loadLocations();     // ✅ load LOCATIONS first
+           async function loadLocations() {
+  try {
+    const res = await fetch('/locations.json');
+    LOCATIONS = await res.json();
+
+    // OPTIONAL: populate city dropdown dynamically
+    populateCitiesDropdown();
+
+  } catch (err) {
+    console.error("Failed to load locations.json", err);
+    alert("Unable to load locations file. Run using Live Server / local server.");
+  }
+}
+  generateDataset();
+  populateLocalities();
+  initCharts();
+  setupEventListeners();
+  updatePrediction();
+  populateTable();
+
+  setTimeout(() => {
+    const loader = document.getElementById('loading-overlay');
+    loader.style.opacity = '0';
+    setTimeout(() => loader.style.display = 'none', 1000);
+  }, 1200);
+};
         function populateCitiesDropdown() {
   const citySelect = document.getElementById('city-select');
-  if (!citySelect) return;
-
   citySelect.innerHTML = '';
 
   Object.keys(LOCATIONS).sort().forEach(city => {
@@ -674,152 +694,6 @@ function getLocationFeatures(city, locality) {
     citySelect.appendChild(opt);
   });
 }
-        function animateValue(obj, start, end, duration) {
-  let startTimestamp = null;
-
-  const step = (timestamp) => {
-    if (!startTimestamp) startTimestamp = timestamp;
-    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-    const current = Math.floor(progress * (end - start) + start);
-
-    obj.innerHTML = formatCurrency(current);
-
-    if (progress < 1) {
-      window.requestAnimationFrame(step);
-    }
-  };
-
-  window.requestAnimationFrame(step);
-}
-
-  //  -----------------------------------
-        //Load MarketCSV
- //-------------------------------------
-        
-        async function loadMarketCSV() {
-  const res = await fetch("/marketData.csv");
-  const text = await res.text();
-
-  const lines = text.trim().split("\n");
-  const headers = lines[0].split(",");
-
-  const data = lines.slice(1).map(line => {
-    const values = line.split(",");
-    const row = {};
-    headers.forEach((h, i) => row[h.trim()] = values[i].trim());
-    return {
-      city: row.city,
-      locality: row.locality,
-      sqft: Number(row.sqft),
-      bhk: Number(row.bhk),
-      age: Number(row.age),
-      price: Number(row.price)
-    };
-  });
-
-  return data;
-}
-        // ------------Train a Linear Regression model------------
-        //--------------------------------------------------------
-
-function trainLinearRegression(data, epochs = 1200, lr = 0.000000000000001) {
-  let w = [0, 0, 0, 0, 0];
-  let b = 0;
-
-  for (let e = 0; e < epochs; e++) {
-    let dw = [0, 0, 0, 0, 0];
-    let db = 0;
-
-    for (const d of data) {
-      // location numeric features from LOCATIONS
-      const { basePrice, locMult } = getLocationFeatures(d.city, d.locality);
-const x = [d.sqft, d.bhk, d.age, basePrice, locMult];
-      const y = d.price;
-
-      const yPred = w[0]*x[0] + w[1]*x[1] + w[2]*x[2] + w[3]*x[3] + w[4]*x[4] + b;
-      const err = yPred - y;
-
-      dw[0] += err * x[0];
-      dw[1] += err * x[1];
-      dw[2] += err * x[2];
-      dw[3] += err * x[3];
-      dw[4] += err * x[4];
-      db += err;
-    }
-
-    // average gradients
-    for (let i = 0; i < dw.length; i++) dw[i] /= data.length;
-    db /= data.length;
-
-    // update parameters
-    for (let i = 0; i < w.length; i++) w[i] -= lr * dw[i];
-    b -= lr * db;
-  }
-
-  model = { w, b };
-  console.log("✅ Linear model trained with city+locality features:", model);
-}
-        //-----------Predict using the trained model------------
-  function predictMLPrice(sqft, bhk, age, basePrice, locMultiplier) {
-  return Math.round(
-    model.w[0]*sqft +
-    model.w[1]*bhk +
-    model.w[2]*age +
-    model.w[3]*basePrice +
-    model.w[4]*locMultiplier +
-    model.b
-  );
-}    
-        // ---------------------------------------------------------
-        // INITIALIZATION
-        // ---------------------------------------------------------
-       async function loadLocations() {
-  try {
-    const res = await fetch('/locations.json');
-    LOCATIONS = await res.json();
-    populateCitiesDropdown();
-  } catch (err) {
-    console.error("Failed to load locations.json", err);
-  }
-}
-window.onload = async () => {
-  const loader = document.getElementById('loading-overlay');
-
-  try {
-    await loadLocations();
-    marketData = await loadMarketCSV();
-
-    trainLinearRegression(marketData);
-
-    populateLocalities();
-    initCharts();
-    setupEventListeners();
-    updatePrediction();
-    populateTable();
-  } catch (err) {
-    console.error("App init failed:", err);
-  } finally {
-    if (loader) {
-      loader.style.opacity = '0';
-      setTimeout(() => loader.style.display = 'none', 800);
-    }
-  }
-};
-  const loader = document.getElementById('loading-overlay');
-
-  try {
-    await loadLocations();
-    marketData = await loadMarketCSV();
-    trainLinearRegression(marketData);
-
-    populateLocalities();
-    initCharts();
-    setupEventListeners();
-    updatePrediction();
-    populateTable();
-
-  } catch (err) {
-    console.error("App init failed:", err);
 
         // ---------------------------------------------------------
         // CORE LOGIC (ML / MATH)
@@ -843,26 +717,25 @@ window.onload = async () => {
             const jitter = 0.98 + (Math.random() * 0.04);
             return Math.round(price * jitter);
         }
+
         function generateDataset() {
-  marketData = [];
-  const cities = Object.keys(LOCATIONS);
-
-  for (let i = 0; i < 150; i++) {
-    const city = cities[Math.floor(Math.random() * cities.length)];
-    const localities = Object.keys(LOCATIONS[city].localities);
-    const locality = localities[Math.floor(Math.random() * localities.length)];
-
-    const sqft = 600 + Math.floor(Math.random() * 2400);
-    const bhk = sqft < 1000 ? 1 : (sqft < 1800 ? 2 : (sqft < 2500 ? 3 : 4));
-    const age = Math.floor(Math.random() * 25);
-
-   const { basePrice, locMult } = getLocationFeatures(city, locality);
-const price = predictMLPrice(sqft, bhk, age, basePrice, locMult);
-
-    // ✅ push row
-    marketData.push({ city, locality, sqft, bhk, age, price });
-  }
-}
+            marketData = [];
+            const cities = Object.keys(LOCATIONS);
+            
+            for (let i = 0; i < 150; i++) {
+                const city = cities[Math.floor(Math.random() * cities.length)];
+                const localities = Object.keys(LOCATIONS[city].localities);
+                const locality = localities[Math.floor(Math.random() * localities.length)];
+                
+                const sqft = 600 + Math.floor(Math.random() * 2400);
+                const bhk = sqft < 1000 ? 1 : (sqft < 1800 ? 2 : (sqft < 2500 ? 3 : 4));
+                const age = Math.floor(Math.random() * 25);
+                
+                const price = calculatePrice(city, locality, sqft, bhk, age);
+                
+                marketData.push({ city, locality, sqft, bhk, age, price });
+            }
+        }
 
         // ---------------------------------------------------------
         // UI MANIPULATION
@@ -905,50 +778,65 @@ const price = predictMLPrice(sqft, bhk, age, basePrice, locMult);
             return new Intl.NumberFormat('en-IN').format(val);
         }
 
-       function updatePrediction() {
-  const city = document.getElementById('city-select').value;
-  const locality = document.getElementById('locality-select').value;
-  const sqft = parseInt(document.getElementById('sqft-slider').value);
-  const bhk = parseInt(document.getElementById('bhk-slider').value);
-  const age = parseInt(document.getElementById('age-slider').value);
+        function updatePrediction() {
+            const city = document.getElementById('city-select').value;
+            const locality = document.getElementById('locality-select').value;
+            const sqft = parseInt(document.getElementById('sqft-slider').value);
+            const bhk = parseInt(document.getElementById('bhk-slider').value);
+            const age = parseInt(document.getElementById('age-slider').value);
+            
+            const price = calculatePrice(city, locality, sqft, bhk, age);
+            
+            // Animate price counter
+            const priceEl = document.getElementById('predicted-price');
+            const startVal = parseInt(priceEl.textContent.replace(/,/g, '')) || 0;
+            animateValue(priceEl, startVal, price, 600);
+            
+            // Adjust market tag and gauge
+            let tag = document.getElementById('market-tag');
+            let gaugeRing = document.getElementById('gauge-fill-ring');
+            let gaugeText = document.getElementById('gauge-text');
+            
+            const pricePerSqft = price / sqft;
+            // Range 3000 to 13000 as typical range for visualization
+            let percentage = Math.round(((pricePerSqft - 3000) / 10000) * 100);
+            percentage = Math.max(0, Math.min(100, percentage));
+            
+            gaugeText.textContent = percentage + '%';
+            
+            // Update circular gauge using conic gradient for smooth visual
+            gaugeRing.style.background = `conic-gradient(var(--accent) ${percentage * 3.6}deg, transparent 0deg)`;
+            gaugeRing.style.border = 'none'; // Overriding the previous border logic
 
-  const { basePrice, locMult } = getLocationFeatures(city, locality);
+            if (percentage < 35) {
+                tag.textContent = 'Highly Affordable';
+                tag.style.color = '#10b981';
+                tag.style.background = 'rgba(16, 185, 129, 0.1)';
+            } else if (percentage < 70) {
+                tag.textContent = 'Market Moderate';
+                tag.style.color = '#3b82f6';
+                tag.style.background = 'rgba(59, 130, 246, 0.1)';
+            } else {
+                tag.textContent = 'Premium Segment';
+                tag.style.color = '#f59e0b';
+                tag.style.background = 'rgba(245, 158, 11, 0.1)';
+            }
+        }
 
-  const price = predictMLPrice(sqft, bhk, age, basePrice, locMult);
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const current = Math.floor(progress * (end - start) + start);
+                obj.innerHTML = formatCurrency(current);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
 
-  const priceEl = document.getElementById('predicted-price');
-  const startVal = parseInt(priceEl.textContent.replace(/,/g, '')) || 0;
-
-  animateValue(priceEl, startVal, price, 600);
-
-  // ✅ MOVE THIS INSIDE FUNCTION
-  let tag = document.getElementById('market-tag');
-  let gaugeRing = document.getElementById('gauge-fill-ring');
-  let gaugeText = document.getElementById('gauge-text');
-
-  const pricePerSqft = price / sqft;
-
-  let percentage = Math.round(((pricePerSqft - 3000) / 10000) * 100);
-  percentage = Math.max(0, Math.min(100, percentage));
-
-  gaugeText.textContent = percentage + '%';
-
-  gaugeRing.style.background =
-    `conic-gradient(var(--accent) ${percentage * 3.6}deg, transparent 0deg)`;
-
-  gaugeRing.style.border = 'none';
-
-  if (percentage < 35) {
-    tag.textContent = 'Highly Affordable';
-    tag.style.color = '#10b981';
-  } else if (percentage < 70) {
-    tag.textContent = 'Market Moderate';
-    tag.style.color = '#3b82f6';
-  } else {
-    tag.textContent = 'Premium Segment';
-    tag.style.color = '#f59e0b';
-  }
-}
         function populateTable() {
             const tbody = document.getElementById('data-table-body');
             tbody.innerHTML = '';
