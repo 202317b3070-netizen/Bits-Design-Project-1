@@ -683,6 +683,126 @@ function logout() {
     console.error("❌ Error loading CSV:", err);
   }
 }
+        // ---------------------------------------------------------
+// LINEAR REGRESSION (Frontend - Gradient Descent)
+// ---------------------------------------------------------
+let model = { w: [], b: 0 };
+let featureMeans = [];
+let featureStds = [];
+
+// Convert a marketData row into feature vector
+function toFeatures(row) {
+  return [
+    row.sqft,
+    row.bhk,
+    row.age,
+    row.basePrice,
+    row.locMultiplier
+  ];
+}
+
+// Standardize features (important for stable training)
+function fitStandardizer(X) {
+  const nFeatures = X[0].length;
+  featureMeans = new Array(nFeatures).fill(0);
+  featureStds  = new Array(nFeatures).fill(0);
+
+  // mean
+  for (let j = 0; j < nFeatures; j++) {
+    let sum = 0;
+    for (let i = 0; i < X.length; i++) sum += X[i][j];
+    featureMeans[j] = sum / X.length;
+  }
+
+  // std
+  for (let j = 0; j < nFeatures; j++) {
+    let sumSq = 0;
+    for (let i = 0; i < X.length; i++) {
+      const diff = X[i][j] - featureMeans[j];
+      sumSq += diff * diff;
+    }
+    featureStds[j] = Math.sqrt(sumSq / X.length) || 1; // avoid divide by 0
+  }
+}
+
+function transformStandardizer(x) {
+  return x.map((val, j) => (val - featureMeans[j]) / featureStds[j]);
+}
+
+// Train Linear Regression using Gradient Descent
+function trainLinearRegression() {
+  if (!marketData || marketData.length < 20) {
+    console.warn("Not enough data to train.");
+    return;
+  }
+
+  // Build X, y
+  const Xraw = marketData.map(d => toFeatures(d));
+  const y = marketData.map(d => d.price);
+
+  // Fit standardizer and transform X
+  fitStandardizer(Xraw);
+  const X = Xraw.map(transformStandardizer);
+
+  const nSamples = X.length;
+  const nFeatures = X[0].length;
+
+  // Initialize weights
+  model.w = new Array(nFeatures).fill(0);
+  model.b = 0;
+
+  const lr = 0.05;       // learning rate
+  const epochs = 350;    // iterations
+
+  for (let epoch = 0; epoch < epochs; epoch++) {
+    // gradients
+    let dw = new Array(nFeatures).fill(0);
+    let db = 0;
+
+    for (let i = 0; i < nSamples; i++) {
+      // prediction
+      let yhat = model.b;
+      for (let j = 0; j < nFeatures; j++) yhat += model.w[j] * X[i][j];
+
+      const err = (yhat - y[i]);
+      db += err;
+      for (let j = 0; j < nFeatures; j++) dw[j] += err * X[i][j];
+    }
+
+    // Average gradients
+    db /= nSamples;
+    for (let j = 0; j < nFeatures; j++) dw[j] /= nSamples;
+
+    // Update params
+    model.b -= lr * db;
+    for (let j = 0; j < nFeatures; j++) model.w[j] -= lr * dw[j];
+
+    // Optional: small log
+    if (epoch % 100 === 0) {
+      console.log(`Training epoch ${epoch}/${epochs}`);
+    }
+  }
+
+  console.log("✅ Linear Regression trained!", model);
+}
+
+// Predict price using trained model
+function predictPriceML(city, locality, sqft, bhk, age) {
+  // Find basePrice & locMultiplier for selected city/locality from LOCATIONS
+  const cityData = LOCATIONS[city];
+  const basePrice = cityData?.basePrice || 0;
+  const locMultiplier = cityData?.localities?.[locality] ?? 1;
+
+  let x = [sqft, bhk, age, basePrice, locMultiplier];
+  x = transformStandardizer(x);
+
+  let yhat = model.b;
+  for (let j = 0; j < model.w.length; j++) yhat += model.w[j] * x[j];
+
+  // Safety clamp
+  if (!isFinite(yhat)) yhat = 0;
+  return Math.max(0, Math.round(yhat));
+}
        window.onload = async () => {
   await loadLocations();     // ✅ load LOCATIONS first
            await loadCSVData();
