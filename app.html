@@ -655,8 +655,37 @@ function logout() {
         // ---------------------------------------------------------
         // INITIALIZATION
         // ---------------------------------------------------------
+        async function loadCSVData() {
+  try {
+    const res = await fetch('/marketData.csv');
+    const text = await res.text();
+
+    const rows = text.split('\n').slice(1); // skip header
+
+    marketData = rows.map(row => {
+      const cols = row.split(',');
+
+      return {
+        city: cols[0],
+        location: cols[1],
+        sqft: parseFloat(cols[2]),
+        bhk: parseInt(cols[3]),
+        age: parseInt(cols[4]),
+        price: parseFloat(cols[5]),
+        basePrice: parseFloat(cols[6]),
+        locMultiplier: parseFloat(cols[7])
+      };
+    }).filter(d => !isNaN(d.sqft));
+
+    console.log("✅ CSV Data Loaded:", marketData);
+
+  } catch (err) {
+    console.error("❌ Error loading CSV:", err);
+  }
+}
        window.onload = async () => {
   await loadLocations();     // ✅ load LOCATIONS first
+           await loadCSVData();
            async function loadLocations() {
   try {
     const res = await fetch('/locations.json');
@@ -670,7 +699,6 @@ function logout() {
     alert("Unable to load locations file. Run using Live Server / local server.");
   }
 }
-  generateDataset();
   populateLocalities();
   initCharts();
   setupEventListeners();
