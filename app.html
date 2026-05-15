@@ -1081,31 +1081,53 @@ function predictPriceML(city, locality, sqft, bhk, age) {
             updateCharts();
         }
 
-        function updateCharts() {
-            const currentCity = document.getElementById('city-select').value;
-            const citySpecificData = marketData.filter(d => d.city === currentCity);
-            
-            // Update Bar Chart (Avg price by locality in current city)
-            const localities = Object.keys(LOCATIONS[currentCity].localities);
-            const avgPrices = localities.map(loc => {
-                const locData = citySpecificData.filter(d => d.locality === loc);
-                const sum = locData.reduce((acc, d) => acc + (d.price / d.sqft), 0);
-                return Math.round(sum / locData.length) || 0;
-            });
+       function updateCharts() {
+  const currentCity = document.getElementById('city-select').value;
+  const cityData = marketData.filter(d => d.city === currentCity);
 
-            charts.bar.data.labels = localities;
-            charts.bar.data.datasets[0].data = avgPrices;
-            charts.bar.update();
+  // If no data, clear charts
+  if (!cityData.length) {
+    charts.bar.data.labels = [];
+    charts.bar.data.datasets[0].data = [];
+    charts.bar.update();
 
-            // Update Scatter (All data for city)
-            const scatterPoints = citySpecificData.map(d => ({
-                x: d.sqft,
-                y: d.price / 100000 // In Lakhs
-            }));
-            
-            charts.scatter.data.datasets[0].data = scatterPoints;
-            charts.scatter.update();
-        }
+    charts.scatter.data.datasets[0].data = [];
+    charts.scatter.update();
+    return;
+  }
+
+  // ✅ Build avg price/sqft by locality ONLY using available dataset localities
+  const localityMap = {}; // { locality: {sum, count} }
+
+  cityData.forEach(d => {
+    if (!d.locality || !d.sqft || !d.price) return;
+    const ppsf = d.price / d.sqft;
+    if (!isFinite(ppsf)) return;
+
+    if (!localityMap[d.locality]) localityMap[d.locality] = { sum: 0, count: 0 };
+    localityMap[d.locality].sum += ppsf;
+    localityMap[d.locality].count += 1;
+  });
+
+  // Convert to arrays + sort by avg desc
+  const entries = Object.entries(localityMap)
+    .map(([loc, obj]) => ({ loc, avg: Math.round(obj.sum / obj.count) }))
+    .sort((a, b) => b.avg - a.avg)
+    .slice(0, 10); // show top 10 only (looks clean)
+
+  charts.bar.data.labels = entries.map(e => e.loc);
+  charts.bar.data.datasets[0].data = entries.map(e => e.avg);
+  charts.bar.update();
+
+  // ✅ Scatter plot (sqft vs price in lakhs)
+  const scatterPoints = cityData
+    .filter(d => isFinite(d.sqft) && isFinite(d.price))
+    .slice(0, 250) // keep chart fast
+    .map(d => ({ x: d.sqft, y: d.price / 100000 }));
+
+  charts.scatter.data.datasets[0].data = scatterPoints;
+  charts.scatter.update();
+}
         // ===== DARK / LIGHT THEME LOGIC =====
 
 const themeToggle = document.getElementById('theme-toggle');
