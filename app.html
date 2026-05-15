@@ -934,6 +934,20 @@ function predictPriceML(city, locality, sqft, bhk, age) {
         function hasTrainingData(city, locality) {
   return marketData.some(d => d.city === city && d.locality === locality);
 }
+        function safePredictPrice(city, locality, sqft, bhk, age) {
+  // Try ML first ONLY if locality has training rows
+  if (hasTrainingData(city, locality)) {
+    const mlPrice = predictPriceML(city, locality, sqft, bhk, age);
+
+    // If ML gives 0 or nonsense → fallback
+    if (mlPrice > 0 && Number.isFinite(mlPrice)) {
+      return mlPrice;
+    }
+  }
+
+  // Fallback rule-based (always non-zero)
+  return calculatePrice(city, locality, sqft, bhk, age);
+}
 function updatePrediction() {
   const city = document.getElementById('city-select').value;
   const locality = document.getElementById('locality-select').value;
