@@ -793,7 +793,8 @@ function predictPriceML(city, locality, sqft, bhk, age) {
   const basePrice = cityData?.basePrice || 0;
   const locMultiplier = cityData?.localities?.[locality] ?? 1;
 
-  let x = [sqft, bhk, age, basePrice, locMultiplier];
+  let ageAdjusted = -age; // ✅ important fix
+  let x = [sqft, bhk, ageAdjusted, basePrice, locMultiplier];
   x = transformStandardizer(x);
 
   let yhat = model.b;
