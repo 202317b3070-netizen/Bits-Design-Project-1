@@ -911,7 +911,10 @@ function predictPriceML(city, locality, sqft, bhk, age) {
             
             inputs.forEach(id => {
                 document.getElementById(id).addEventListener('input', (e) => {
-                    if (id === 'city-select') populateLocalities();
+                    if (id === 'city-select') {
+  populateLocalities();
+  populateTable();
+}
                     
                     // Update value displays
                     if (id === 'sqft-slider') document.getElementById('sqft-val').textContent = e.target.value;
