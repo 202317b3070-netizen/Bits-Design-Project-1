@@ -935,7 +935,7 @@ function predictPriceML(city, locality, sqft, bhk, age) {
             const bhk = parseInt(document.getElementById('bhk-slider').value);
             const age = parseInt(document.getElementById('age-slider').value);
             
-            const price = calculatePrice(city, locality, sqft, bhk, age);
+            const price = predictPriceML(city, locality, sqft, bhk, age);
             
             // Animate price counter
             const priceEl = document.getElementById('predicted-price');
