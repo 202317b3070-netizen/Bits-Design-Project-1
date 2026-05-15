@@ -957,9 +957,7 @@ function updatePrediction() {
 
   const useML = hasTrainingData(city, locality);
 
-  const price = useML
-    ? predictPriceML(city, locality, sqft, bhk, age)
-    : calculatePrice(city, locality, sqft, bhk, age);
+  const price = safePredictPrice(city, locality, sqft, bhk, age);
 
   // Animate price counter
   const priceEl = document.getElementById('predicted-price');
