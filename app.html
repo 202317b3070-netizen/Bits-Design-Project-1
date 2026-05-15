@@ -942,6 +942,7 @@ function updatePrediction() {
   const age = parseInt(document.getElementById('age-slider').value);
 
   const useML = hasTrainingData(city, locality);
+
   const price = useML
     ? predictPriceML(city, locality, sqft, bhk, age)
     : calculatePrice(city, locality, sqft, bhk, age);
@@ -951,33 +952,33 @@ function updatePrediction() {
   const startVal = parseInt(priceEl.textContent.replace(/,/g, '')) || 0;
   animateValue(priceEl, startVal, price, 600);
 
-  // UI elements
+  // Adjust market tag and gauge (no fallback message)
   const tag = document.getElementById('market-tag');
   const gaugeRing = document.getElementById('gauge-fill-ring');
   const gaugeText = document.getElementById('gauge-text');
 
-  // Gauge calc
   const pricePerSqft = price / sqft;
   let percentage = Math.round(((pricePerSqft - 3000) / 10000) * 100);
   percentage = Math.max(0, Math.min(100, percentage));
   gaugeText.textContent = percentage + '%';
+
   gaugeRing.style.background = `conic-gradient(var(--accent) ${percentage * 3.6}deg, transparent 0deg)`;
   gaugeRing.style.border = 'none';
 
-  // ✅ Tag text: ML vs fallback (your requirement)
-  if (!useML) {
-    tag.textContent = "Fallback (No ML data for this locality)";
-    tag.style.color = "#f59e0b";
-    tag.style.background = "rgba(245, 158, 11, 0.1)";
-    return; // stop here because fallback message should remain
+  // Keep your original affordability labels
+  if (percentage < 35) {
+    tag.textContent = 'Highly Affordable';
+    tag.style.color = '#10b981';
+    tag.style.background = 'rgba(16, 185, 129, 0.1)';
+  } else if (percentage < 70) {
+    tag.textContent = 'Market Moderate';
+    tag.style.color = '#3b82f6';
+    tag.style.background = 'rgba(59, 130, 246, 0.1)';
   } else {
-    tag.textContent = "ML Prediction Active";
-    tag.style.color = "#10b981";
-    tag.style.background = "rgba(16, 185, 129, 0.1)";
+    tag.textContent = 'Premium Segment';
+    tag.style.color = '#f59e0b';
+    tag.style.background = 'rgba(245, 158, 11, 0.1)';
   }
-
-  // Optional: You can keep affordability labels too if you want
-  // (If you want BOTH messages, tell me and I’ll adjust properly)
 }
         function animateValue(obj, start, end, duration) {
             let startTimestamp = null;
