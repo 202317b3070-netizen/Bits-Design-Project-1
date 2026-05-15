@@ -934,65 +934,51 @@ function predictPriceML(city, locality, sqft, bhk, age) {
         function hasTrainingData(city, locality) {
   return marketData.some(d => d.city === city && d.locality === locality);
 }
+function updatePrediction() {
+  const city = document.getElementById('city-select').value;
+  const locality = document.getElementById('locality-select').value;
+  const sqft = parseInt(document.getElementById('sqft-slider').value);
+  const bhk = parseInt(document.getElementById('bhk-slider').value);
+  const age = parseInt(document.getElementById('age-slider').value);
 
-        function updatePrediction() {
-            const city = document.getElementById('city-select').value;
-            const locality = document.getElementById('locality-select').value;
-            const sqft = parseInt(document.getElementById('sqft-slider').value);
-            const bhk = parseInt(document.getElementById('bhk-slider').value);
-            const age = parseInt(document.getElementById('age-slider').value);
-            
-            const price = hasTrainingData(city, locality)
-  ? predictPriceML(city, locality, sqft, bhk, age)
-  : calculatePrice(city, locality, sqft, bhk, age);
-            
-            // Animate price counter
-            const priceEl = document.getElementById('predicted-price');
-            const startVal = parseInt(priceEl.textContent.replace(/,/g, '')) || 0;
-            animateValue(priceEl, startVal, price, 600);
-            
-            // Adjust market tag and gauge
-            let tag = document.getElementById('market-tag');
-            let gaugeRing = document.getElementById('gauge-fill-ring');
-            let gaugeText = document.getElementById('gauge-text');
-            
-            const pricePerSqft = price / sqft;
-            // Range 3000 to 13000 as typical range for visualization
-            let percentage = Math.round(((pricePerSqft - 3000) / 10000) * 100);
-            percentage = Math.max(0, Math.min(100, percentage));
-            
-            gaugeText.textContent = percentage + '%';
-            
-            // Update circular gauge using conic gradient for smooth visual
-            gaugeRing.style.background = `conic-gradient(var(--accent) ${percentage * 3.6}deg, transparent 0deg)`;
-            gaugeRing.style.border = 'none'; // Overriding the previous border logic
+  const useML = hasTrainingData(city, locality);
+  const price = useML
+    ? predictPriceML(city, locality, sqft, bhk, age)
+    : calculatePrice(city, locality, sqft, bhk, age);
 
-            if (percentage < 35) {
-                tag.textContent = 'Highly Affordable';
-                tag.style.color = '#10b981';
-                tag.style.background = 'rgba(16, 185, 129, 0.1)';
-            } else if (percentage < 70) {
-                tag.textContent = 'Market Moderate';
-                tag.style.color = '#3b82f6';
-                tag.style.background = 'rgba(59, 130, 246, 0.1)';
-            } else {
-                tag.textContent = 'Premium Segment';
-                tag.style.color = '#f59e0b';
-                tag.style.background = 'rgba(245, 158, 11, 0.1)';
-            }
-            const tag = document.getElementById('market-tag');
+  // Animate price counter
+  const priceEl = document.getElementById('predicted-price');
+  const startVal = parseInt(priceEl.textContent.replace(/,/g, '')) || 0;
+  animateValue(priceEl, startVal, price, 600);
 
-if (!hasTrainingData(city, locality)) {
-  tag.textContent = "Fallback (No ML data for this locality)";
-  tag.style.color = "#f59e0b";
-  tag.style.background = "rgba(245, 158, 11, 0.1)";
-} else {
-  tag.textContent = "ML Prediction Active";
-  tag.style.color = "#10b981";
-  tag.style.background = "rgba(16, 185, 129, 0.1)";
+  // UI elements
+  const tag = document.getElementById('market-tag');
+  const gaugeRing = document.getElementById('gauge-fill-ring');
+  const gaugeText = document.getElementById('gauge-text');
+
+  // Gauge calc
+  const pricePerSqft = price / sqft;
+  let percentage = Math.round(((pricePerSqft - 3000) / 10000) * 100);
+  percentage = Math.max(0, Math.min(100, percentage));
+  gaugeText.textContent = percentage + '%';
+  gaugeRing.style.background = `conic-gradient(var(--accent) ${percentage * 3.6}deg, transparent 0deg)`;
+  gaugeRing.style.border = 'none';
+
+  // ✅ Tag text: ML vs fallback (your requirement)
+  if (!useML) {
+    tag.textContent = "Fallback (No ML data for this locality)";
+    tag.style.color = "#f59e0b";
+    tag.style.background = "rgba(245, 158, 11, 0.1)";
+    return; // stop here because fallback message should remain
+  } else {
+    tag.textContent = "ML Prediction Active";
+    tag.style.color = "#10b981";
+    tag.style.background = "rgba(16, 185, 129, 0.1)";
+  }
+
+  // Optional: You can keep affordability labels too if you want
+  // (If you want BOTH messages, tell me and I’ll adjust properly)
 }
-        }
-
         function animateValue(obj, start, end, duration) {
             let startTimestamp = null;
             const step = (timestamp) => {
