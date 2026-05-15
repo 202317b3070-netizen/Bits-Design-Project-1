@@ -930,6 +930,10 @@ function predictPriceML(city, locality, sqft, bhk, age) {
         function formatCurrency(val) {
             return new Intl.NumberFormat('en-IN').format(val);
         }
+        
+        function hasTrainingData(city, locality) {
+  return marketData.some(d => d.city === city && d.locality === locality);
+}
 
         function updatePrediction() {
             const city = document.getElementById('city-select').value;
@@ -938,7 +942,9 @@ function predictPriceML(city, locality, sqft, bhk, age) {
             const bhk = parseInt(document.getElementById('bhk-slider').value);
             const age = parseInt(document.getElementById('age-slider').value);
             
-            const price = predictPriceML(city, locality, sqft, bhk, age);
+            const price = hasTrainingData(city, locality)
+  ? predictPriceML(city, locality, sqft, bhk, age)
+  : calculatePrice(city, locality, sqft, bhk, age);
             
             // Animate price counter
             const priceEl = document.getElementById('predicted-price');
@@ -974,6 +980,17 @@ function predictPriceML(city, locality, sqft, bhk, age) {
                 tag.style.color = '#f59e0b';
                 tag.style.background = 'rgba(245, 158, 11, 0.1)';
             }
+            const tag = document.getElementById('market-tag');
+
+if (!hasTrainingData(city, locality)) {
+  tag.textContent = "Fallback (No ML data for this locality)";
+  tag.style.color = "#f59e0b";
+  tag.style.background = "rgba(245, 158, 11, 0.1)";
+} else {
+  tag.textContent = "ML Prediction Active";
+  tag.style.color = "#10b981";
+  tag.style.background = "rgba(16, 185, 129, 0.1)";
+}
         }
 
         function animateValue(obj, start, end, duration) {
