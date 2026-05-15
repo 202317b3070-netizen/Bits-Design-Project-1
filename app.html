@@ -987,26 +987,40 @@ function predictPriceML(city, locality, sqft, bhk, age) {
             window.requestAnimationFrame(step);
         }
 
-        function populateTable() {
-            const tbody = document.getElementById('data-table-body');
-            tbody.innerHTML = '';
-            
-            // Take 5 random samples
-            const samples = marketData.sort(() => 0.5 - Math.random()).slice(0, 5);
-            
-            samples.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="font-medium" style="color: var(--text-main)">${row.city}</td>
-                    <td style="color: var(--text-dim)">${row.locality}</td>
-                    <td style="color: var(--text-dim)">${row.bhk} BHK</td>
-                    <td style="color: var(--text-dim)">${row.sqft} ft²</td>
-                    <td class="font-bold" style="color: var(--accent)">₹${formatCurrency(row.price)}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
+       function populateTable() {
+  const tbody = document.getElementById('data-table-body');
+  tbody.innerHTML = '';
 
+  const currentCity = document.getElementById('city-select').value;
+  const citySpecificData = marketData.filter(d => d.city === currentCity);
+
+  // If no rows for this city, show a friendly message
+  if (citySpecificData.length === 0) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td colspan="5" style="color: var(--text-dim); padding: 18px;">
+        No dataset rows found for <b>${currentCity}</b>. Please choose another city.
+      </td>
+    `;
+    tbody.appendChild(tr);
+    return;
+  }
+
+  // Take 5 random samples from that city
+  const samples = citySpecificData.sort(() => 0.5 - Math.random()).slice(0, 5);
+
+  samples.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="font-medium" style="color: var(--text-main)">${row.city}</td>
+      <td style="color: var(--text-dim)">${row.locality}</td>
+      <td style="color: var(--text-dim)">${row.bhk} BHK</td>
+      <td style="color: var(--text-dim)">${row.sqft} ft²</td>
+      <td class="font-bold" style="color: var(--accent)">₹${formatCurrency(row.price)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
         // ---------------------------------------------------------
         // DATA VISUALIZATION
         // ---------------------------------------------------------
